@@ -1,0 +1,234 @@
+/* ==========================
+   GENERAL RESET & BASE STYLES
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0A1F44; /* Dark Blue */
+    color: #EAEAEA;
+}
+
+/* ==========================
+   NAVBAR
+   ========================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #081731; /* Slightly darker for navbar */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand h1 {
+    color: #00D8FF; /* Vibrant Cyan */
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideIn 1s ease-out forwards;
+}
+
+.nav-links a {
+    color: #EAEAEA;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 2px;
+    background: #00D8FF;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: #00D8FF;
+}
+
+.nav-links .active {
+    color: #00D8FF;
+}
+
+/* ==========================
+   HERO SECTION
+   ========================== */
+.hero {
+    background: linear-gradient(135deg, #0A1F44 0%, #102B5C 100%);
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0,216,255,0.15) 0%, transparent 70%);
+    top: -50%;
+    left: -50%;
+    animation: rotateBG 25s linear infinite;
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+#hero-title {
+    font-size: 2.5rem;
+    color: #00D8FF; /* Cyan */
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeInUp 1s forwards 0.5s;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #EAEAEA;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeInUp 1s forwards 1s;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background-color: #FF2D95; /* Bright Magenta */
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 20px rgba(255,45,149,0.4);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 1s forwards 1.5s;
+}
+
+.cta-button:hover {
+    background-color: #e0227f;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255,45,149,0.6);
+}
+
+/* ==========================
+   FEATURES SECTION
+   ========================== */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+}
+
+.features div {
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    color: #fff;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    cursor: pointer;
+    opacity: 0;
+    animation: cardFadeIn 1s forwards;
+}
+
+/* Individual card colors */
+#feature-card1 {
+    background-color: #820f919f; /* Cyan */
+    animation-delay: 0.2s;
+}
+#feature-card2 {
+    background-color: #FF2D95; /* Magenta */
+    animation-delay: 0.4s;
+}
+#feature-card3 {
+    background-color: #3A5FFF; /* Medium Blue */
+    animation-delay: 0.6s;
+}
+
+.features div:hover {
+    transform: translateY(-10px) rotate(-1deg) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,216,255,0.5);
+}
+
+/* Card Titles & Text */
+.features h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    animation: textPop 0.5s ease forwards;
+}
+
+.features p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ==========================
+   FOOTER
+   ========================== */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #081731;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotateBG {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    0% { transform: translateX(-50px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes cardFadeIn {
+    0% { opacity: 0; transform: translateY(40px) rotateX(15deg); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+}
+
+@keyframes textPop {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
