@@ -1,0 +1,198 @@
+/* ==========================
+   GENERAL RESET & BASE STYLES
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0A1F44; /* Dark Blue */
+    color: #EAEAEA;
+}
+
+/* ==========================
+   NAVBAR
+   ========================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #081731; /* Darker Navy */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand h2 {
+    color: #00D8FF; /* Cyan */
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideIn 1s ease-out forwards;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-links a {
+    color: #EAEAEA;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #00D8FF;
+}
+
+.nav-links a.active {
+    color: #FF2D95; /* Magenta active */
+}
+
+/* ==========================
+   DASHBOARD CONTAINER
+   ========================== */
+.dashboard-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #102B5C; /* Medium Blue card */
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease forwards;
+}
+
+/* ==========================
+   CARD CONTENT
+   ========================== */
+.card-content h1 {
+    text-align: center;
+    color: #00D8FF;
+    margin-bottom: 0.5rem;
+}
+
+.card-content p {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 1.5rem;
+}
+
+/* ==========================
+   FORM STYLING
+   ========================== */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+label {
+    color: #EAEAEA;
+    font-weight: 500;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 2px solid #00D8FF;
+    background-color: #0D244F;
+    color: #EAEAEA;
+    resize: vertical;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #FF2D95;
+    box-shadow: 0 0 10px rgba(255,45,149,0.5);
+}
+
+/* ==========================
+   BUTTON
+   ========================== */
+.detect-btn {
+    padding: 0.85rem 2rem;
+    background-color: #FF2D95; /* Magenta */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: center;
+    transition: all 0.3s ease;
+}
+
+.detect-btn:hover {
+    background-color: #e0227f;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255,45,149,0.5);
+}
+
+/* ==========================
+   RESULT BOX
+   ========================== */
+.result-box {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background-color: #081731;
+    color: #EAEAEA;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.result-box h3 {
+    color: #00D8FF;
+    margin-bottom: 0.5rem;
+}
+
+.error-text {
+    color: #FF2D95;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.success-text {
+    color: #00D8FF;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+/* ==========================
+   ERROR MESSAGE
+   ========================== */
+.error-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: rgba(255,45,149,0.2);
+    border-radius: 10px;
+    color: #FF2D95;
+    font-weight: 500;
+}
+
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    0% { transform: translateX(-50px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}

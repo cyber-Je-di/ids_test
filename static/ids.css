@@ -1,0 +1,204 @@
+/* ==========================
+   GENERAL RESET & BASE STYLES
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0A1F44; /* Dark Blue */
+    color: #EAEAEA;
+}
+
+/* ==========================
+   NAVBAR
+   ========================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #081731; /* Darker Navy */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand h1 {
+    color: #00D8FF; /* Cyan */
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideIn 1s ease-out forwards;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: #EAEAEA;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #00D8FF;
+}
+
+.nav-links a.active {
+    color: #00D8FF;
+}
+
+/* ==========================
+   CONTAINER
+   ========================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ==========================
+   HEADER
+   ========================== */
+h1 {
+    color: #00D8FF;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    color: #ccc;
+}
+
+/* Status Indicator */
+#status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+#status-text {
+    color: #EAEAEA;
+}
+
+/* ==========================
+   TABLE STYLING
+   ========================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #102B5C; /* Medium Blue Table Background */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead tr {
+    background-color: #081731; /* Dark Navy */
+}
+
+thead th {
+    padding: 0.75rem 1rem;
+    color: #00D8FF; /* Cyan headers */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+tbody td {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: #EAEAEA;
+}
+
+tbody tr {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    cursor: default;
+}
+
+tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,216,255,0.4);
+    background-color: #0D244F; /* Slightly lighter hover */
+}
+
+/* New alert animation */
+@keyframes fadeInRow {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.new-alert {
+    animation: fadeInRow 0.5s ease-in-out;
+}
+
+/* ==========================
+   ML Prediction Badges
+   ========================== */
+.ml-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.ml-attack {
+    background-color: rgba(255,45,149,0.2); /* Magenta light */
+    color: #FF2D95; /* Magenta */
+}
+
+.ml-normal {
+    background-color: rgba(0,216,255,0.2); /* Cyan light */
+    color: #00D8FF; /* Cyan */
+}
+
+.ml-unknown {
+    background-color: rgba(200,200,200,0.2); /* Grey light */
+    color: #ccc;
+}
+
+/* ==========================
+   RESPONSIVE TABLE
+   ========================== */
+@media (max-width: 768px) {
+    thead {
+        display: none;
+    }
+    tbody td {
+        display: block;
+        width: 100%;
+        padding: 0.5rem;
+        text-align: right;
+        position: relative;
+    }
+    tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 1rem;
+        font-weight: 600;
+        text-align: left;
+        color: #00D8FF;
+    }
+}
+
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes slideIn {
+    0% { transform: translateX(-50px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
