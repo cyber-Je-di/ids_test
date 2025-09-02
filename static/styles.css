@@ -1,0 +1,605 @@
+:root {
+    --primary-color: #3f51b5;
+    --secondary-color: #f44336;
+    --background-color: #f0f2f5;
+    --card-background: #ffffff;
+    --text-color: #333;
+    --light-text: #666;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* --- General Layout --- */
+.dashboard-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: var(--card-background);
+    color: var(--text-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.dashboard-nav {
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.nav-brand h1, .nav-brand h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--light-text);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color);
+}
+
+.user-info {
+    font-size: 0.9rem;
+    color: var(--light-text);
+    background-color: #f0f0f0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+/* --- Hero Section (Index Page) --- */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/2387793/pexels-photo-2387793.jpeg?cs=srgb&dl=pexels-adrien-olichon-2387793.jpg&fm=jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* --- Gmail Inbox Scan Styling --- */
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+}
+
+.email-result-card {
+    background-color: #f7f7f7;
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.email-result-card p {
+    margin: 5px 0;
+}
+
+.email-result-card {
+    background-color: #f7f7f7;
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: transform 0.2s ease;
+}
+
+.email-result-card:hover {
+    transform: translateY(-2px);
+}
+
+.email-result-card.phishing {
+    border-left-color: var(--secondary-color);
+    background-color: #fff3f3;
+}
+
+.email-result-card.safe {
+    border-left-color: #4caf50;
+    background-color: #f3fff5;
+}
+
+.email-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.email-header p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.email-snippet p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.email-status {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 0.95rem;
+}
+
+.expand-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.3s ease;
+}
+
+.expand-btn:hover {
+    background-color: #303f9f;
+}
+
+.email-full-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 0.85rem;
+    color: var(--text-color);
+}
+
+
+.cta-button:hover {
+    background-color: #303f9f;
+}
+
+/* --- Features Section (Index Page) --- */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 40px 20px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.feature-card h3 {
+    color: var(--primary-color);
+}
+
+/* --- Footer --- */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--text-color);
+    color: white;
+    margin-top: 40px;
+}
+
+
+/* --- Dashboard Specific Styles (from the original) --- */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.status-indicators {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.status-good .status-dot {
+    background-color: #4caf50;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-right: 10px;
+}
+
+.card-content {
+    flex-grow: 1;
+}
+
+.card-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.card-footer {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.large-card {
+    grid-column: span 2;
+}
+
+.threat-preview {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.mini-chart {
+    flex-basis: 50%;
+}
+
+.threat-summary {
+    flex-basis: 50%;
+}
+
+.threat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.threat-type {
+    font-weight: bold;
+}
+
+.quick-actions .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e8eaf6;
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #c5cae9;
+}
+
+.btn-icon {
+    margin-right: 8px;
+}
+
+.alerts-section h2 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.alerts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alert-item {
+    background-color: #fff3e0;
+    border-left: 5px solid #ff9800;
+    padding: 15px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-item.critical {
+    background-color: #ffebee;
+    border-left-color: var(--secondary-color);
+}
+
+.alert-info h4 {
+    margin: 0 0 5px;
+}
+
+.alert-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* --- SMS & Phishing Detector Page Styles --- */
+.form-container {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    margin: 2rem auto;
+    max-width: 700px;
+}
+
+.form-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 1rem;
+}
+
+.detect-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.detect-btn:hover {
+    background-color: #303f9f;
+}
+
+.result-box {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    margin: 2rem auto;
+    max-width: 700px;
+}
+
+.prediction-details h2 {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.success-text {
+    color: #4caf50;
+}
+
+.error-text {
+    color: var(--secondary-color);
+}
+
+.prediction-details p {
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.progress-bar::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.progress-bar.success::-webkit-progress-value {
+    background-color: #4caf50;
+    border-radius: 5px;
+}
+
+.progress-bar.error::-webkit-progress-value {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+}
+
+.confidence-box {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.info-text {
+    color: #2196f3;
+}
+
+.warning-text {
+    color: #ffc107;
+}
+
+.individual-predictions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.individual-predictions h3 {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.model-metrics {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.metric-card {
+    text-align: center;
+    background-color: #f7f7f7;
+    padding: 1rem;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--light-text);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    display: block;
+}
+
+.metric-help {
+    font-size: 0.8rem;
+    color: #999;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        justify-content: center;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .large-card {
+        grid-column: span 1;
+    }
+    
+    .threat-preview {
+        flex-direction: column;
+    }
+}

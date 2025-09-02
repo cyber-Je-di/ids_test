@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Suspicious Email Request",
+    "description": "You receive an email from what appears to be your company's IT department asking you to verify your account credentials immediately to avoid service disruption. The email contains a link to a login page.",
+    "question": "What should you do?",
+    "options": [
+      "Do not click the link. Contact your IT department directly to verify the request",
+      "Click the link and enter your credentials to avoid service disruption",
+      "Forward the email to colleagues to warn them about a potential issue",
+      "Reply to the email asking for more information"
+    ],
+    "correct": 0,
+    "feedback": "Legitimate IT departments will never ask for credentials via email. Always verify suspicious requests through official channels before taking any action. This is a common phishing attempt."
+  },
+  {
+    "title": "Unexpected USB Drive",
+    "description": "You find an unlabeled USB drive in the parking lot of your office building. It has no identifying information but looks professionally manufactured.",
+    "question": "What is the safest action to take?",
+    "options": [
+      "Plug it into your work computer to identify the owner",
+      "Turn it in to lost and found or security without plugging it in",
+      "Take it home and plug it into your personal computer",
+      "Format the drive and use it for your own purposes"
+    ],
+    "correct": 1,
+    "feedback": "Unknown USB devices can contain malware designed to automatically infect computers when plugged in. This is a common social engineering tactic. Always hand found devices to security professionals."
+  }
+  
+]

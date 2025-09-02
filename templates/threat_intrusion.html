@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intrusion Detection - CyberGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='threatcss.css') }}">
+</head>
+<body>
+  <nav class="navbar glass-effect flex justify-between items-center">
+    <h2 class="text-xl font-bold">🔍 Intrusion Detection</h2>
+    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
+  </nav>
+
+  <div class="max-w-5xl mx-auto px-6 py-6">
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-gradient-to-r from-black to-cyan-500 text-white p-4 rounded-xl">
+        <h3 class="font-semibold mb-2">Network Monitoring</h3>
+        <div class="text-2xl font-bold" id="network-events">0</div>
+        <p class="text-sm text-white/80">Events detected</p>
+      </div>
+      <div class="bg-gradient-to-r from-black to-purple-500 text-white p-4 rounded-xl">
+        <h3 class="font-semibold mb-2">Anomaly Detection</h3>
+        <div class="text-2xl font-bold" id="anomalies">0</div>
+        <p class="text-sm text-white/80">Anomalies found</p>
+      </div>
+      <div class="bg-gradient-to-r from-black to-teal-500 text-white p-4 rounded-xl">
+        <h3 class="font-semibold mb-2">Response Time</h3>
+        <div class="text-2xl font-bold" id="response-time">0ms</div>
+        <p class="text-sm text-white/80">Average response</p>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+        Launch Intrusion Detector
+      </button>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+</body>
+</html>

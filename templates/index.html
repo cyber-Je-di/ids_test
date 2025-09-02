@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard - Integrated Security System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1><i class="fa-sharp fa-solid fa-shield-halved"></i> CyberGuardian</h1>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
+            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h2 id="hero-title">Your All-in-One Cybersecurity Solution</h2>
+            <p>Protect your digital life with our integrated system for threat detection, spam filtering, and security awareness.</p>
+            <a href="{{ url_for('dashboard') }}" class="cta-button">Launch Dashboard</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>Real-time Threat Detection</h3>
+            <p>Proactively identify and block malicious network activity and intrusions.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Advanced Spam & Scam Filtering</h3>
+            <p>Utilize AI-powered models to detect and filter fraudulent SMS and email messages.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Cybersecurity Awareness</h3>
+            <p>Empower yourself and your team with interactive training modules and security tips.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 CyberGuard. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Simple JS for a dynamic feel on the index page
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroTitle = document.getElementById('hero-title');
+            const originalText = heroTitle.textContent;
+            heroTitle.textContent = '';
+            let i = 0;
+            const typeWriter = () => {
+                if (i < originalText.length) {
+                    heroTitle.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            };
+            typeWriter();
+        });
+    </script>
+</body>
+</html>

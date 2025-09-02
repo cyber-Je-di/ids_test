@@ -1,0 +1,58 @@
+[
+  {
+    "question": "What is the primary goal of phishing attacks?",
+    "options": [
+      "To trick users into revealing sensitive information",
+      "To encrypt files and demand ransom",
+      "To overwhelm a network with traffic",
+      "To gain physical access to devices"
+    ],
+    "correct": 0,
+    "explanation": "Phishing attacks aim to deceive individuals into providing sensitive data such as passwords, credit card numbers, or other personal information by pretending to be a trustworthy entity."
+  },
+  {
+    "question": "Which of the following is a strong password practice?",
+    "options": [
+      "Using the same password for multiple accounts",
+      "Using personal information like pet names",
+      "Using a mix of uppercase, lowercase, numbers and symbols",
+      "Writing passwords on sticky notes"
+    ],
+    "correct": 2,
+    "explanation": "Strong passwords should include a combination of uppercase and lowercase letters, numbers, and special characters to make them harder to guess or crack."
+  },
+  {
+    "question": "What does HTTPS indicate in a website URL?",
+    "options": [
+      "The website is free to use",
+      "The connection between your browser and the website is encrypted",
+      "The website is government-owned",
+      "The website has multimedia content"
+    ],
+    "correct": 1,
+    "explanation": "HTTPS (Hypertext Transfer Protocol Secure) indicates that the communication between your browser and the website is encrypted, helping to protect your data from eavesdroppers."
+  },
+  {
+    "question": "What is multi-factor authentication (MFA)?",
+    "options": [
+      "Using multiple passwords for one account",
+      "A security system that requires more than one method of verification",
+      "Having multiple user accounts on the same device",
+      "Using the same authentication across multiple platforms"
+    ],
+    "correct": 1,
+    "explanation": "Multi-factor authentication adds an extra layer of security by requiring two or more verification methods, such as something you know (password), something you have (phone), or something you are (fingerprint)."
+  },
+  {
+    "question": "What should you do if you receive a suspicious email asking for personal information?",
+    "options": [
+      "Reply with the requested information",
+      "Click on links to verify the sender's legitimacy",
+      "Delete the email without responding",
+      "Forward it to all your contacts to warn them"
+    ],
+    "correct": 2,
+    "explanation": "Suspicious emails should be deleted without responding. Never click on links or download attachments from unknown senders, as they may contain malware or lead to phishing sites."
+  }
+ 
+]

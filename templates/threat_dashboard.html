@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Dashboard - CyberGuard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='threatcss.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar glass-effect">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-orange-600 rounded-full flex items-center justify-center">
+                <span class="text-white font-bold">🛡️</span>
+            </div>
+            <h2 class="text-xl font-bold">CyberGuard Threat Center</h2>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="real-time-indicator">
+                <div class="pulse-dot w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Live Monitoring</span>
+            </div>
+            <a href="/" class="nav-link hover:text-blue-300">Home</a>
+            <a href="/dashboard" class="nav-link hover:text-blue-300">Dashboard</a>
+            <a href="/sms_detector" class="nav-link hover:text-blue-300">SMS Detector</a>
+            <a href="/phishing_detector" class="nav-link hover:text-blue-300">Phishing Detector</a>
+            <a href="/threat_dashboard" class="nav-link font-bold text-blue-300">Threats</a>
+        </div>
+    </nav>
+
+    <!-- Alert Banner -->
+    <div id="alert-banner" class="alert-banner text-white text-center py-3 mx-4 rounded-xl mb-4 hidden">
+        <div class="flex items-center justify-center space-x-2">
+            <span class="text-xl">🚨</span>
+            <span id="alert-text" class="font-semibold"></span>
+            <button onclick="dismissAlert()" class="ml-4 bg-white/20 rounded-full w-6 h-6 flex items-center justify-center">×</button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Overview Cards -->
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6">
+            <!-- Active Threats → Logs -->
+            <a href="/threats/logs" class="card threat-card block hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Active Threats</h3>
+                        <div class="text-3xl font-bold" id="active-threats">0</div>
+                        <p class="text-sm text-white/80">Last 24 hours</p>
+                    </div>
+                    <div class="text-4xl opacity-20">🚨</div>
+                </div>
+            </a>
+
+            <!-- Blocked Attempts → Analytics -->
+            <a href="/threats/analytics" class="card warning-card block hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Blocked Attempts</h3>
+                        <div class="text-3xl font-bold" id="blocked-attempts">0</div>
+                        <p class="text-sm text-white/80">Today</p>
+                    </div>
+                    <div class="text-4xl opacity-20">📈</div>
+                </div>
+            </a>
+
+            <!-- Unique IPs → IDS -->
+            <a href="/threats/intrusion" class="card info-card block hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Unique IPs</h3>
+                        <div class="text-3xl font-bold" id="unique-ips">0</div>
+                        <p class="text-sm text-white/80">Monitoring</p>
+                    </div>
+                    <div class="text-4xl opacity-20">🔍</div>
+                </div>
+            </a>
+
+            <!-- System Status → Comm -->
+            <a href="/threats/comm" class="card safe-card block hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">System Status</h3>
+                        <div class="text-xl font-bold" id="system-status">SECURE</div>
+                        <p class="text-sm text-white/80">All systems operational</p>
+                    </div>
+                    <div class="text-4xl opacity-20">📨</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Quick Links to Detailed Views -->
+        <div class="grid lg:grid-cols-2 gap-6 mt-6">
+            <a href="/threats/logs" class="card hover:scale-105 transition-transform">
+                <h2 class="text-xl font-bold gradient-text mb-2 flex items-center">
+                    <span class="mr-2">📊</span> Real-time Threat Logs
+                </h2>
+                <p class="text-gray-400">Live feed of detected threats with filtering by severity.</p>
+            </a>
+
+            <a href="/threats/analytics" class="card hover:scale-105 transition-transform">
+                <h2 class="text-xl font-bold gradient-text mb-2 flex items-center">
+                    <span class="mr-2">📈</span> Attack Analytics
+                </h2>
+                <p class="text-gray-400">Charts and statistics on threat types, sources, and trends.</p>
+            </a>
+
+            <a href="/threats/intrusion" class="card hover:scale-105 transition-transform">
+                <h2 class="text-xl font-bold gradient-text mb-2 flex items-center">
+                    <span class="mr-2">🔍</span> Intrusion Detection
+                </h2>
+                <p class="text-gray-400">Network monitoring, anomaly detection, and response metrics.</p>
+            </a>
+
+            <a href="/threats/comm" class="card hover:scale-105 transition-transform">
+                <h2 class="text-xl font-bold gradient-text mb-2 flex items-center">
+                    <span class="mr-2">📨</span> Email & SMS Monitoring
+                </h2>
+                <p class="text-gray-400">Statistics and scanning results for phishing and scam messages.</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="notification-toast">
+        <div class="flex items-center space-x-3">
+            <span class="text-xl">🚨</span>
+            <div>
+                <div class="font-semibold" id="toast-title">Alert</div>
+                <div class="text-sm" id="toast-message">New threat detected</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+</body>
+</html>

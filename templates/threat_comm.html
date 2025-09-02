@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email & SMS Monitoring - CyberGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='threatcss.css') }}">
+</head>
+<body>
+  <nav class="navbar glass-effect flex justify-between items-center">
+    <h2 class="text-xl font-bold">📨 Email & SMS Monitoring</h2>
+    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-6 py-6 grid md:grid-cols-2 gap-6">
+    <!-- SMS Stats -->
+    <div class="card">
+      <h3 class="font-semibold mb-3">SMS Statistics</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-4 rounded-xl">
+          <h4>Scanned</h4><div id="sms-total" class="text-2xl font-bold">0</div>
+        </div>
+        <div class="bg-gradient-to-r from-red-600 to-pink-500 text-white p-4 rounded-xl">
+          <h4>Scam</h4><div id="sms-scam" class="text-2xl font-bold">0</div>
+        </div>
+        <div class="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-4 rounded-xl">
+          <h4>Genuine</h4><div id="sms-genuine" class="text-2xl font-bold">0</div>
+        </div>
+      </div>
+      <!-- SMS Chart -->
+      <div class="mt-4">
+        <canvas id="smsChart" height="120"></canvas>
+      </div>
+    </div>
+
+    <!-- Email Stats -->
+    <div class="card">
+      <h3 class="font-semibold mb-3">Email Statistics</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-500 text-white p-4 rounded-xl">
+          <h4>Scanned</h4><div id="email-total" class="text-2xl font-bold">0</div>
+        </div>
+        <div class="bg-gradient-to-r from-red-500 to-orange-500 text-white p-4 rounded-xl">
+          <h4>Phishing</h4><div id="email-phishing" class="text-2xl font-bold">0</div>
+        </div>
+        <div class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 rounded-xl">
+          <h4>Safe</h4><div id="email-safe" class="text-2xl font-bold">0</div>
+        </div>
+      </div>
+      <!-- Email Chart -->
+      <div class="mt-4">
+        <canvas id="emailChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-center text-gray-400 mt-4">Last updated: <span id="lastUpdate">--</span></p>
+
+  <script>
+    // Initialize SMS chart
+    const smsCtx = document.getElementById("smsChart").getContext("2d");
+    const smsChart = new Chart(smsCtx, {
+      type: "doughnut",
+      data: {
+        labels: ["Scam", "Genuine"],
+        datasets: [{
+          data: [0, 0],
+          backgroundColor: ["#ef4444", "#10b981"],
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+    });
+
+    // Initialize Email chart
+    const emailCtx = document.getElementById("emailChart").getContext("2d");
+    const emailChart = new Chart(emailCtx, {
+      type: "doughnut",
+      data: {
+        labels: ["Phishing", "Safe"],
+        datasets: [{
+          data: [0, 0],
+          backgroundColor: ["#f97316", "#22c55e"],
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+    });
+
+    // Fetch stats and update UI + charts
+    async function fetchStats() {
+      try {
+        // Fetch SMS stats
+        const smsRes = await fetch("/api/sms_stats");
+        const smsData = await smsRes.json();
+        document.getElementById("sms-total").innerText = smsData.total;
+        document.getElementById("sms-scam").innerText = smsData.scam;
+        document.getElementById("sms-genuine").innerText = smsData.genuine;
+        smsChart.data.datasets[0].data = [smsData.scam, smsData.genuine];
+        smsChart.update();
+
+        // Fetch Email stats
+        const emailRes = await fetch("/api/email_stats");
+        const emailData = await emailRes.json();
+        document.getElementById("email-total").innerText = emailData.total;
+        document.getElementById("email-phishing").innerText = emailData.phishing;
+        document.getElementById("email-safe").innerText = emailData.safe;
+        emailChart.data.datasets[0].data = [emailData.phishing, emailData.safe];
+        emailChart.update();
+
+        // Update last refresh
+        document.getElementById("lastUpdate").innerText = new Date().toLocaleString();
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    }
+
+    // Load immediately & refresh every 5s
+    fetchStats();
+    setInterval(fetchStats, 5000);
+  </script>
+</body>
+</html>

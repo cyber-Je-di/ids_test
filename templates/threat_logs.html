@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Threat Logs - CyberGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='threatcss.css') }}">
+</head>
+<body>
+  <nav class="navbar glass-effect flex justify-between items-center">
+    <h2 class="text-xl font-bold">📊 Threat Logs</h2>
+    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 py-6">
+    <div class="filter-tabs bg-gray-100 p-2 rounded-xl">
+      <div class="filter-tab active" onclick="filterLogs('all')">All</div>
+      <div class="filter-tab" onclick="filterLogs('critical')">Critical</div>
+      <div class="filter-tab" onclick="filterLogs('high')">High</div>
+      <div class="filter-tab" onclick="filterLogs('medium')">Medium</div>
+      <div class="filter-tab" onclick="filterLogs('low')">Low</div>
+    </div>
+
+    <div id="threat-log" class="max-h-[75vh] overflow-y-auto bg-gray-900 rounded-xl p-4 text-white mt-4">
+      <!-- Logs populated dynamically -->
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+</body>
+</html>

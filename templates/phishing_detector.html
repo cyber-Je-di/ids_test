@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phishing Detector - CyberGuard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar dashboard-nav">
+      <div class="nav-brand">
+        <h2>🎣 Phishing Detector</h2>
+      </div>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('sms_detector') }}" class="nav-link"
+          >SMS Detector</a
+        >
+        <a href="{{ url_for('phishing_detector') }}" class="nav-link active"
+          >Phishing Detector</a
+        >
+      </div>
+    </nav>
+
+    <div class="dashboard-container">
+      <div class="card-content">
+        <h1 class="text-center">URL & Email Phishing Scanner</h1>
+        <p class="text-center">
+          Paste a URL or email content to check for phishing attempts.
+        </p>
+
+        <!-- Manual URL/Email Analysis -->
+        <form method="POST" class="form-container">
+          <label for="input_data">Enter URL or Email Content:</label>
+          <textarea
+            name="input_data"
+            id="input_data"
+            rows="5"
+            placeholder="https://example.com/login?redirect=free-money"
+            required
+          >
+{{ input_data }}</textarea
+          >
+          <button type="submit" class="detect-btn">Analyze</button>
+        </form>
+
+        {% if result and not scanned_emails %}
+        <div class="result-box" id="result-box">
+          <h3 class="text-center">Prediction Result</h3>
+          <p
+            class="{{ 'error-text' if result.is_phishing else 'success-text' }}"
+          >
+            {{ '🚨 PHISHING DETECTED!' if result.is_phishing else '✅ SAFE (Not
+            Phishing)' }}
+          </p>
+          <p class="text-center">
+            Classified as:
+            <strong
+              >{{ result.result_text or result.ml_label or 'Unknown' }}</strong
+            >
+          </p>
+        </div>
+        {% endif %} {% if error %}
+        <div class="error-message result-box">
+          <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Gmail Inbox Scan -->
+        <h2 class="text-center" style="margin-top: 40px">
+          Scan Your Gmail Inbox
+        </h2>
+        <form method="POST" class="form-container">
+          <label for="email">Gmail Address:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="you@gmail.com"
+            required
+          />
+
+          <label for="app_password">App Password:</label>
+          <input
+            type="password"
+            name="app_password"
+            id="app_password"
+            placeholder="Enter app password"
+            required
+          />
+
+          <button type="submit" name="scan_inbox" value="1" class="detect-btn">
+            Scan Inbox
+          </button>
+        </form>
+
+       {% if scanned_emails %}
+<div class="result-box">
+    <h3 class="individual-predictions">Inbox Scan Results ({{ scanned_emails|length }} emails)</h3>
+    
+    {% for email in scanned_emails %}
+    <div class="email-result-card {{ 'phishing' if email.result.is_phishing else 'safe' }}">
+        <div class="email-header">
+            <p><strong>From:</strong> {{ email.sender or "Unknown Sender" }}</p>
+            <p><strong>Subject:</strong> {{ email.subject or "No Subject" }}</p>
+            <p><strong>Date:</strong> {{ email.date or "Unknown Date" }}</p>
+        </div>
+
+        <div class="email-snippet">
+            <p>{{ email.snippet|safe }}{% if email.snippet|length > 150 %}...{% endif %}</p>
+        </div>
+
+        <div class="email-status">
+            {% if email.result.is_phishing %}
+                <span class="error-text">🚨 PHISHING DETECTED!</span>
+            {% else %}
+                <span class="success-text">✅ SAFE</span>
+            {% endif %}
+        </div>
+
+        {% if email.full_content %}
+        <div class="email-full-content" style="display:none;">
+            <hr>
+            <pre>{{ email.full_content|safe }}</pre>
+        </div>
+        <button class="expand-btn" onclick="toggleContent(this)">Show Full Email</button>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function toggleContent(button) {
+    const content = button.previousElementSibling;
+    if(content.style.display === 'none') {
+        content.style.display = 'block';
+        button.textContent = 'Hide Full Email';
+    } else {
+        content.style.display = 'none';
+        button.textContent = 'Show Full Email';
+    }
+}
+</script>
+{% endif %}
+
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const result = {{ result | tojson | safe }};
+          const resultBox = document.getElementById('result-box');
+
+          if (result && !{{ scanned_emails|length }}){
+              let resultHtml = `<h3 class="text-center">Prediction Result</h3>`;
+              if (result.is_phishing) {
+                  resultHtml += `<p class="error-text text-center">🚨 <strong>PHISHING DETECTED!</strong></p>`;
+              } else {
+                  resultHtml += `<p class="success-text text-center">✅ <strong>SAFE (Not Phishing)</strong></p>`;
+              }
+              const label = result.result_text || result.ml_label || 'Unknown';
+              resultHtml += `<p class="text-center">Classified as: <strong>${label}</strong></p>`;
+              resultBox.innerHTML = resultHtml;
+          }
+      });
+    </script>
+  </body>
+</html>

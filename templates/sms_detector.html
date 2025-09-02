@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scam SMS Detector - CyberGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar dashboard-nav">
+        <div class="nav-brand">
+            <h2>📱 Scam SMS Detector</h2>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ url_for('sms_detector') }}" class="nav-link active">SMS Detector</a>
+            <a href="{{ url_for('phishing_detector') }}" class="nav-link">Phishing Detector</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="card-content">
+            <h1 class="text-center">Advanced Scam Detector</h1>
+            <p class="text-center">Analyze your SMS messages for scams or spam.</p>
+
+            <form method="POST" class="form-container">
+                <label for="message">Enter a message:</label>
+                <textarea name="message" id="message" rows="5" placeholder="Paste or type your SMS message here..." required>{{ message }}</textarea>
+                <button type="submit" class="detect-btn">Scan Message</button>
+            </form>
+
+            {% if result %}
+            <div class="result-box" id="result-box"></div>
+            {% endif %}
+
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const result = {{ result | tojson | safe }};
+    const resultBox = document.getElementById('result-box');
+
+    if (result) {
+        let html = `<h3>Prediction Result:</h3>`;
+        if (result.is_spam) {
+            html += `<p class="error-text">🚨 <strong>SCAM/SPAM DETECTED!</strong></p>`;
+        } else {
+            html += `<p class="success-text">✅ <strong>SAFE MESSAGE (HAM)</strong></p>`;
+        }
+
+        // Optional: show simple label from result
+        if (result.result_text) {
+            html += `<p>Classification: <strong>${result.result_text}</strong></p>`;
+        }
+
+        resultBox.innerHTML = html;
+    }
+});
+</script>
+
+</body>
+</html>
