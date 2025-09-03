@@ -451,21 +451,21 @@ def predict():
         prediction = model.predict(scaled_features)
         ml_prediction_text = "Attack" if prediction[0] == 0 else "Normal"
 
-        # Only add the alert to the dashboard if the model confirms it's an attack.
-        if ml_prediction_text == "Attack":
-            with lock:
-                alert_id_counter += 1
-                alert_info = {
-                    "id": alert_id_counter,
-                    "timestamp": datetime.now().isoformat(),
-                    "source_ip": data.get("source_ip", "N/A"),
-                    "dest_ip": data.get("destination_ip", "N/A"),
-                    "attack_type": data.get("snort_alert_description", "Unknown Event"),
-                    "ml_prediction": ml_prediction_text,
-                }
-                confirmed_attacks.insert(0, alert_info)
-                if len(confirmed_attacks) > 100:
-                    confirmed_attacks.pop()
+        # For demonstration purposes, we will add all alerts processed by the log_processor
+        # to the dashboard, regardless of the ML prediction. The prediction is stored for context.
+        with lock:
+            alert_id_counter += 1
+            alert_info = {
+                "id": alert_id_counter,
+                "timestamp": datetime.now().isoformat(),
+                "source_ip": data.get("source_ip", "N/A"),
+                "dest_ip": data.get("destination_ip", "N/A"),
+                "attack_type": data.get("snort_alert_description", "Unknown Event"),
+                "ml_prediction": ml_prediction_text,
+            }
+            confirmed_attacks.insert(0, alert_info)
+            if len(confirmed_attacks) > 100:
+                confirmed_attacks.pop()
 
         return jsonify({"status": "processed", "prediction": ml_prediction_text})
 
