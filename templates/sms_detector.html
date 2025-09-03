@@ -63,6 +63,25 @@
       .label-high { background-color: #28a745; }
       .label-medium { background-color: #ffc107; color: #000; }
       .label-low { background-color: #dc3545; }
+
+      /* Styles for Explanation Box */
+      .explanation-box {
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .explanation-scam {
+        background-color: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.4);
+        color: #e74c3c;
+      }
+      .explanation-safe {
+        background-color: rgba(40, 167, 69, 0.1);
+        border: 1px solid rgba(40, 167, 69, 0.4);
+        color: #2ecc71;
+      }
     </style>
   </head>
   <body>
@@ -129,6 +148,16 @@
                   html += `<p class="error-text">🚨 <strong>SCAM/SPAM DETECTED!</strong></p>`;
               } else {
                   html += `<p class="success-text">✅ <strong>SAFE MESSAGE (HAM)</strong></p>`;
+              }
+
+              // Explanation Box
+              if (result.explanation) {
+                  const alertClass = result.is_spam ? 'explanation-scam' : 'explanation-safe';
+                  html += `
+                      <div class="explanation-box ${alertClass}">
+                          <strong>Explanation:</strong> ${result.explanation}
+                      </div>
+                  `;
               }
               
               // Classification text
