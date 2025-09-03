@@ -1,0 +1,133 @@
+/* ==========================
+   GENERAL RESET & BASE STYLES
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0A1F44; /* Dark Blue */
+    color: #EAEAEA;
+}
+
+/* ==========================
+   NAVBAR
+   ========================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #081731;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar h2 {
+    color: #00D8FF;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideIn 1s ease-out forwards;
+}
+
+.navbar a {
+    color: #EAEAEA;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.navbar a:hover {
+    color: #00D8FF;
+    background-color: rgba(0,216,255,0.1);
+}
+
+/* ==========================
+   CARDS
+   ========================== */
+.card {
+    padding: 2rem;
+    border-radius: 15px;
+    background-color: #102B5C;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    opacity: 0;
+    animation: cardFadeIn 0.8s forwards;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(0,216,255,0.3);
+}
+
+/* Card Titles */
+.card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #00D8FF, #FF2D95);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textPop 0.5s ease forwards;
+}
+
+/* Stats Boxes */
+.card .grid div {
+    background: rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.card .grid div:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,216,255,0.3);
+}
+
+/* Stats Labels */
+.card h4 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Last Update Text */
+#lastUpdate {
+    color: #00D8FF;
+    font-weight: 500;
+}
+
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    0% { transform: translateX(-50px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes cardFadeIn {
+    0% { opacity: 0; transform: translateY(40px) rotateX(15deg); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+}
+
+@keyframes textPop {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}

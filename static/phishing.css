@@ -174,31 +174,72 @@ textarea:focus, input:focus {
 /* ==========================
    EMAIL SCAN RESULTS
    ========================== */
+.email-cards-container {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+
+
 .email-result-card {
     background-color: #0D244F;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    border-left: 5px solid #00D8FF;
-    transition: all 0.3s ease;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 6px solid #00D8FF;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
 }
 
 .email-result-card.phishing {
     border-left-color: #FF2D95;
+    box-shadow: 0 8px 20px rgba(255,45,149,0.4);
+}
+
+.email-result-card.safe {
+    border-left-color: #10B981;
+    box-shadow: 0 8px 20px rgba(16,185,129,0.3);
 }
 
 .email-result-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 10px 25px rgba(0,216,255,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
 }
 
-.email-header p, .email-snippet p, .email-status span {
-    color: #EAEAEA;
+.email-header p {
     margin: 0.2rem 0;
+    font-size: 0.95rem;
+}
+
+.email-snippet p {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin: 0.4rem 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+.phishing-badge {
+    background-color: rgba(255,45,149,0.2);
+    color: #FF2D95;
+}
+
+.safe-badge {
+    background-color: rgba(16,185,129,0.2);
+    color: #10B981;
 }
 
 .expand-btn {
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     border: none;
@@ -213,6 +254,28 @@ textarea:focus, input:focus {
     background-color: #00b0e0;
     transform: scale(1.05);
 }
+
+.email-full-content {
+    margin-top: 0.5rem;
+    background-color: #081731;
+    padding: 0.8rem;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #0A1F44;
+    margin: 0.5rem 0;
+}
+
+/* Optional staggered animation for multiple cards */
+.email-result-card:nth-child(1) { animation-delay: 0.05s; }
+.email-result-card:nth-child(2) { animation-delay: 0.1s; }
+.email-result-card:nth-child(3) { animation-delay: 0.15s; }
+.email-result-card:nth-child(4) { animation-delay: 0.2s; }
 
 /* ==========================
    ERROR MESSAGE
