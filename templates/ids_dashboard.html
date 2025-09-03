@@ -4,62 +4,430 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Live IDS Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='ids.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet">
+      rel="stylesheet"
     />
-  </head>
-  <body class="bg-gray-100">
+    <style>
+      /* ==========================
+         GENERAL RESET & BASE STYLES
+         ========================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
 
-        <nav class="navbar">
-        <div class="nav-brand">
-            <h1><i class="fa-sharp fa-solid fa-shield-halved"></i> CyberGuardian</h1>
-        </div>
-        <div class="nav-links">
-            <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
-            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-        </div>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #0a1f44; /* Dark Blue */
+        color: #eaeaea;
+        min-height: 100vh;
+      }
+
+      /* ==========================
+         NAVBAR
+         ========================== */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #081731; /* Slightly darker for navbar */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-brand h1 {
+        color: #00d8ff; /* Vibrant Cyan */
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideIn 1s ease-out forwards;
+      }
+
+      .nav-links a {
+        color: #eaeaea;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a::after {
+        content: "";
+        display: block;
+        width: 0%;
+        height: 2px;
+        background: #00d8ff;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .nav-links a:hover,
+      .nav-links .active {
+        color: #00d8ff;
+      }
+
+      /* ==========================
+         DASHBOARD CONTAINER
+         ========================== */
+      .container {
+        max-width: 1200px;
+      }
+
+      /* ==========================
+         DASHBOARD HEADER
+         ========================== */
+      .dashboard-header {
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .dashboard-header h1 {
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .dashboard-header p {
+        color: #eaeaea;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      /* ==========================
+         STATUS INDICATOR
+         ========================== */
+      .status-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        background: rgba(0, 216, 255, 0.1);
+        border: 1px solid rgba(0, 216, 255, 0.3);
+        border-radius: 50px;
+        backdrop-filter: blur(10px);
+      }
+
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .status-indicator.connecting {
+        background-color: #ffa500;
+        box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+      }
+
+      .status-indicator.connected {
+        background-color: #4caf50;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+      }
+
+      .status-indicator.error {
+        background-color: #f44336;
+        box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+      }
+
+      .status-text {
+        font-weight: 600;
+        color: #00d8ff;
+      }
+
+      /* ==========================
+         TABLE CONTAINER
+         ========================== */
+      .table-container {
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      /* ==========================
+         TABLE STYLES
+         ========================== */
+      .alerts-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: transparent;
+      }
+
+      .alerts-table thead {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+      }
+
+      .alerts-table thead th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: white;
+        border: none;
+      }
+
+      .alerts-table tbody tr {
+        border-bottom: 1px solid rgba(0, 216, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .alerts-table tbody tr:hover {
+        background: rgba(0, 216, 255, 0.05);
+        transform: scale(1.01);
+      }
+
+      .alerts-table tbody td {
+        padding: 1rem;
+        color: #eaeaea;
+        font-size: 0.9rem;
+      }
+
+      /* ==========================
+         PREDICTION BADGES
+         ========================== */
+      .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        display: inline-block;
+      }
+
+      .badge-attack {
+        background: linear-gradient(135deg, #ff2d95 0%, #ff6b6b 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
+      }
+
+      .badge-normal {
+        background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      }
+
+      .badge-unknown {
+        background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+      }
+
+      /* ==========================
+         LOADING STATE
+         ========================== */
+      .loading-container {
+        text-align: center;
+        padding: 3rem;
+        color: #eaeaea;
+      }
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(0, 216, 255, 0.2);
+        border-top: 3px solid #00d8ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+      }
+
+      /* ==========================
+         ANIMATIONS
+         ========================== */
+      @keyframes slideIn {
+        0% {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ==========================
+         NEW ALERT ANIMATION
+         ========================== */
+      .new-alert {
+        animation: newAlertGlow 2s ease-in-out;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 216, 255, 0.1) 0%,
+          rgba(0, 216, 255, 0.2) 50%,
+          rgba(0, 216, 255, 0.1) 100%
+        );
+      }
+
+      @keyframes newAlertGlow {
+        0% {
+          background: rgba(0, 216, 255, 0.3);
+          box-shadow: 0 0 20px rgba(0, 216, 255, 0.5);
+        }
+        100% {
+          background: transparent;
+          box-shadow: none;
+        }
+      }
+
+      /* ==========================
+         RESPONSIVE DESIGN
+         ========================== */
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 1rem;
+        }
+
+        .nav-brand h1 {
+          font-size: 1.3rem;
+        }
+
+        .nav-links a {
+          margin-left: 1rem;
+          font-size: 0.9rem;
+        }
+
+        .dashboard-header {
+          padding: 1.5rem;
+          text-align: center;
+        }
+
+        .dashboard-header h1 {
+          font-size: 2rem;
+        }
+
+        .status-container {
+          padding: 0.75rem 1rem;
+        }
+
+        .table-container {
+          padding: 1rem;
+        }
+
+        .alerts-table {
+          font-size: 0.8rem;
+        }
+
+        .alerts-table th,
+        .alerts-table td {
+          padding: 0.75rem 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-brand">
+        <i class="fa-sharp fa-solid fa-shield-halved"></i><h1>🛡️ CyberGuardian</h1>
+      </div>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('dashboard') }}" class="nav-link active">Dashboard</a
+        >
+        {% if session.get('user_email') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+      </div>
     </nav>
+
     <div class="container mx-auto p-4 md:p-8">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-800">Live IDS Dashboard</h1>
-          <p class="text-gray-600">
-            Real-time alerts from Snort, classified by the ML model.
-          </p>
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
+      >
+        <div class="dashboard-header flex-1">
+          <h1>Live IDS Dashboard</h1>
+          <p>Real-time alerts from Snort, classified by the ML model.</p>
         </div>
-        <div class="flex items-center space-x-2">
+        <div class="status-container">
           <span
             id="status-indicator"
-            class="h-3 w-3 rounded-full bg-yellow-400"
+            class="status-indicator connecting"
           ></span>
-          <span id="status-text" class="text-sm font-medium text-gray-500"
-            >Connecting...</span
-          >
+          <span id="status-text" class="status-text">Connecting...</span>
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-lg">
+      <div class="table-container">
         <div class="overflow-x-auto">
-          <table class="table-auto w-full text-left whitespace-nowrap">
+          <table class="alerts-table">
             <thead>
-              <tr
-                class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50"
-              >
-                <th class="px-4 py-3">Timestamp</th>
-                <th class="px-4 py-3">Source IP</th>
-                <th class="px-4 py-3">Destination IP</th>
-                <th class="px-4 py-3">Snort Alert</th>
-                <th class="px-4 py-3">ML Prediction</th>
+              <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Snort Alert</th>
+                <th>ML Prediction</th>
               </tr>
             </thead>
-            <tbody id="alerts-table-body" class="divide-y">
-              <!-- Rows will be inserted here by JavaScript -->
+            <tbody id="alerts-table-body">
               <tr id="loading-row">
-                <td colspan="5" class="text-center p-8 text-gray-500">
-                  Waiting for first alert from processor...
+                <td colspan="5" class="loading-container">
+                  <div class="loading-spinner"></div>
+                  <p>Waiting for first alert from processor...</p>
                 </td>
               </tr>
             </tbody>
@@ -84,8 +452,8 @@
           const alerts = await response.json();
 
           // Update status to connected
-          statusIndicator.classList.remove("bg-yellow-400", "bg-red-500");
-          statusIndicator.classList.add("bg-green-500");
+          statusIndicator.classList.remove("connecting", "error");
+          statusIndicator.classList.add("connected");
           statusText.textContent = "Connected";
 
           if (alerts.length === 0 && lastAlertId === 0) {
@@ -106,9 +474,9 @@
         } catch (error) {
           console.error("Failed to fetch alerts:", error);
           // Update status to show an error
-          statusIndicator.classList.remove("bg-yellow-400", "bg-green-500");
-          statusIndicator.classList.add("bg-red-500");
-          statusText.textContent = "Error";
+          statusIndicator.classList.remove("connecting", "connected");
+          statusIndicator.classList.add("error");
+          statusText.textContent = "Connection Error";
         }
       }
 
@@ -116,7 +484,8 @@
         tableBody.innerHTML = ""; // Clear and redraw for simplicity
         alerts.forEach((alert, index) => {
           const row = document.createElement("tr");
-          row.className = "text-gray-700 border-b hover:bg-gray-50";
+          row.style.animation = "fadeInUp 0.5s ease forwards";
+          row.style.animationDelay = `${index * 0.1}s`;
 
           // Add animation to the very first row if it's new
           if (index === 0) {
@@ -126,23 +495,23 @@
           // Prediction Badge
           let predictionBadge;
           if (alert.ml_prediction === "Attack") {
-            predictionBadge = `<span class="px-2 py-1 font-semibold leading-tight rounded-full text-red-700 bg-red-100">${alert.ml_prediction}</span>`;
+            predictionBadge = `<span class="badge badge-attack">${alert.ml_prediction}</span>`;
           } else if (alert.ml_prediction === "Normal") {
-            predictionBadge = `<span class="px-2 py-1 font-semibold leading-tight rounded-full text-green-700 bg-green-100">${alert.ml_prediction}</span>`;
+            predictionBadge = `<span class="badge badge-normal">${alert.ml_prediction}</span>`;
           } else {
-            predictionBadge = `<span class="px-2 py-1 font-semibold leading-tight rounded-full text-gray-700 bg-gray-100">${alert.ml_prediction}</span>`;
+            predictionBadge = `<span class="badge badge-unknown">${alert.ml_prediction}</span>`;
           }
 
           // Format timestamp
-          const timestamp = new Date(alert.timestamp).toLocaleTimeString();
+          const timestamp = new Date(alert.timestamp).toLocaleString();
 
           row.innerHTML = `
-                    <td class="px-4 py-3 text-sm">${timestamp}</td>
-                    <td class="px-4 py-3 text-sm font-mono">${alert.source_ip}</td>
-                    <td class="px-4 py-3 text-sm font-mono">${alert.dest_ip}</td>
-                    <td class="px-4 py-3 text-sm">${alert.attack_type}</td>
-                    <td class="px-4 py-3 text-sm">${predictionBadge}</td>
-                `;
+            <td class="font-mono">${timestamp}</td>
+            <td class="font-mono text-cyan-400">${alert.source_ip}</td>
+            <td class="font-mono text-cyan-400">${alert.dest_ip}</td>
+            <td>${alert.attack_type}</td>
+            <td>${predictionBadge}</td>
+          `;
           tableBody.appendChild(row);
         });
       }

@@ -12,6 +12,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #0A1F44; /* Dark Blue */
     color: #EAEAEA;
+    line-height: 1.6;
 }
 
 /* ==========================
@@ -23,15 +24,16 @@ body {
     align-items: center;
     padding: 1rem 2rem;
     background-color: #081731;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .nav-brand h2 {
-    color: #00D8FF; /* Cyan */
-    font-size: 1.4rem;
+    color: #00D8FF;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -48,11 +50,12 @@ body {
     text-decoration: none;
     font-weight: 500;
     position: relative;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover {
     color: #00D8FF;
+    transform: translateY(-2px);
 }
 
 .nav-links a.active {
@@ -60,8 +63,9 @@ body {
 }
 
 .user-info {
-    color: #FF2D95; /* Magenta */
-    font-weight: bold;
+    color: #FF2D95;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
 /* ==========================
@@ -80,9 +84,10 @@ body {
 }
 
 .dashboard-header h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #00D8FF;
     margin-bottom: 1rem;
+    text-shadow: 0 0 6px rgba(0,216,255,0.5);
 }
 
 .status-indicators {
@@ -96,17 +101,15 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .status-dot {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background-color: #00D8FF;
-}
-
-.status-good .status-dot {
-    background-color: #00D8FF; /* Cyan for operational */
+    box-shadow: 0 0 5px rgba(0,216,255,0.7);
 }
 
 /* ==========================
@@ -118,20 +121,23 @@ body {
     gap: 2rem;
 }
 
+/* Card styling */
 .dashboard-card {
-    background-color: #102B5C; /* Medium Dark Blue */
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-    padding: 1.5rem;
+    background: linear-gradient(145deg, #102B5C, #081B3A);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 15px rgba(0,216,255,0.1) inset;
+    padding: 1.8rem 1.5rem;
     cursor: pointer;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
     opacity: 0;
     animation: cardFadeIn 1s forwards;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .dashboard-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 15px 35px rgba(0,216,255,0.5);
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,216,255,0.6), 0 0 20px rgba(255,45,149,0.3) inset;
+    background: linear-gradient(145deg, #123071, #0A1F44);
 }
 
 .dashboard-card.large-card {
@@ -147,27 +153,32 @@ body {
 }
 
 .card-icon {
-    font-size: 2rem;
-    color: #FF2D95; /* Magenta for icons */
+    font-size: 2.3rem;
+    color: #FF2D95;
+    text-shadow: 0 0 8px rgba(255,45,149,0.7);
 }
 
 .card-header h3 {
-    font-size: 1.3rem;
-    color: #00D8FF; /* Cyan title */
+    font-size: 1.4rem;
+    color: #00D8FF;
+    font-weight: 600;
     animation: textPop 0.5s ease forwards;
+    text-shadow: 0 0 6px rgba(0,216,255,0.5);
 }
 
 /* Card content */
 .card-content p {
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 1rem;
+    line-height: 1.5;
     margin-bottom: 1rem;
+    color: #D6D6D6;
 }
 
 .card-stats {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    margin-top: 0.5rem;
 }
 
 .stat {
@@ -178,29 +189,31 @@ body {
 }
 
 .stat-number {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #FF2D95; /* Magenta numbers */
+    color: #FF2D95;
+    text-shadow: 0 0 6px rgba(255,45,149,0.7);
 }
 
 .stat-label {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #ccc;
 }
 
 /* Card footer */
 .card-footer {
-    margin-top: 1rem;
+    margin-top: 1.2rem;
 }
 
 .card-action {
     font-weight: 600;
     color: #00D8FF;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .card-action:hover {
     color: #FF2D95;
+    transform: translateY(-2px);
 }
 
 /* ==========================

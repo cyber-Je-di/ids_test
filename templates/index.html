@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CyberGuard - Integrated Security System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="nav-brand">
-            <h1><i class="fa-sharp fa-solid fa-shield-halved"></i> CyberGuardian</h1>
-        </div>
-        <div class="nav-links">
-            <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
-            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-        </div>
+      <div class="nav-brand">
+        <h1>
+          <i class="fa-sharp fa-solid fa-shield-halved"></i> CyberGuardian
+        </h1>
+      </div>
+      <div class="nav-links">
+        {% set role = session.get('user_role') %}
+        <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
+
+        {% if role in ['admin', 'analyst'] %}
+        <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('ids_dashboard') }}" class="nav-link">IDS</a>
+        {% endif %} 
+
+        <a href="{{ url_for('sms_detector') }}" class="nav-link"
+          >SMS Detector</a
+        >
+        <a href="{{ url_for('phishing_detector') }}" class="nav-link"
+          >Phishing Detector</a
+        >
+        <a href="{{ url_for('awareness_page') }}" class="nav-link"
+          >Cybersecurity Awareness</a
+        >
+
+        {% if session.get('user_email') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% endif %} {% if role %}
+        <span class="user-info">👤 {{ role.capitalize() }}</span>
+        {% endif %}
+      </div>
     </nav>
 
     <header class="hero">
-        <div class="hero-content">
-            <h2 id="hero-title">Your All-in-One Cybersecurity Solution</h2>
-            <p>Protect your digital life with our integrated system for threat detection, spam filtering, and security awareness.</p>
-            <a href="{{ url_for('dashboard') }}" class="cta-button">Launch Dashboard</a>
-        </div>
+      <div class="hero-content">
+        <h2 id="hero-title">Your All-in-One Cybersecurity Solution</h2>
+        <p>
+          Protect your digital life with our integrated system for threat
+          detection, spam filtering, and security awareness.
+        </p>
+        {% if role in ['admin', 'analyst'] %}
+        <a href="{{ url_for('dashboard') }}" class="cta-button"
+          >Launch Dashboard</a
+        >
+        {% endif %}
+      </div>
     </header>
 
     <section class="features">
-        <div id="feature-card1">
-            <h3>Real-time Threat Detection</h3>
-            <p>Proactively identify and block malicious network activity and intrusions.</p>
-        </div>
-        <div id="feature-card2">
-            <h3>Advanced Spam & Scam Filtering</h3>
-            <p>Utilize AI-powered models to detect and filter fraudulent SMS and email messages.</p>
-        </div>
-        <div id="feature-card3">
-            <h3>Cybersecurity Awareness</h3>
-            <p>Empower yourself and your team with interactive training modules and security tips.</p>
-        </div>
+      <div id="feature-card1">
+        <h3>Real-time Threat Detection</h3>
+        <p>
+          Proactively identify and block malicious network activity and
+          intrusions.
+        </p>
+      </div>
+      <div id="feature-card2">
+        <h3>Advanced Spam & Scam Filtering</h3>
+        <p>
+          Utilize AI-powered models to detect and filter fraudulent SMS and
+          email messages.
+        </p>
+      </div>
+      <div id="feature-card3">
+        <h3>Cybersecurity Awareness</h3>
+        <p>
+          Empower yourself and your team with interactive training modules and
+          security tips.
+        </p>
+      </div>
     </section>
 
     <footer class="footer">
-        <p>&copy; 2025 CyberGuard. All Rights Reserved.</p>
+      <p>&copy; 2025 CyberGuard. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // Simple JS for a dynamic feel on the index page
-        document.addEventListener('DOMContentLoaded', () => {
-            const heroTitle = document.getElementById('hero-title');
-            const originalText = heroTitle.textContent;
-            heroTitle.textContent = '';
-            let i = 0;
-            const typeWriter = () => {
-                if (i < originalText.length) {
-                    heroTitle.textContent += originalText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50);
-                }
-            };
-            typeWriter();
-        });
+      // Simple JS for a dynamic feel on the index page
+      document.addEventListener("DOMContentLoaded", () => {
+        const heroTitle = document.getElementById("hero-title");
+        const originalText = heroTitle.textContent;
+        heroTitle.textContent = "";
+        let i = 0;
+        const typeWriter = () => {
+          if (i < originalText.length) {
+            heroTitle.textContent += originalText.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+          }
+        };
+        typeWriter();
+      });
     </script>
-</body>
+  </body>
 </html>

@@ -1,113 +1,644 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phishing Detector - CyberGuard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='phishing.css') }}" />
-</head>
-<body>
+    <style>
+      /* ==========================
+         GENERAL RESET & BASE STYLES
+         ========================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0a1f44; /* Dark Blue */
+        color: #eaeaea;
+      }
+
+      /* ==========================
+         NAVBAR
+         ========================== */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #081731; /* Darker Navy */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-brand h2 {
+        color: #00d8ff; /* Cyan */
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideIn 1s ease-out forwards;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        color: #eaeaea;
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a::after {
+        content: "";
+        display: block;
+        width: 0%;
+        height: 2px;
+        background: #00d8ff;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .nav-links a:hover {
+        color: #00d8ff;
+      }
+
+      .nav-links a.active {
+        color: #ff2d95; /* Magenta active */
+      }
+
+      /* ==========================
+         DASHBOARD CONTAINER
+         ========================== */
+      .dashboard-container {
+        max-width: 950px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        animation: fadeInUp 1s ease forwards;
+      }
+
+      /* ==========================
+         CARD CONTENT
+         ========================== */
+      .card-content h1,
+      .card-content h2 {
+        text-align: center;
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+      }
+
+      .card-content p {
+        text-align: center;
+        color: #eaeaea;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      /* ==========================
+         FORM STYLING
+         ========================== */
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      label {
+        color: #eaeaea;
+        font-weight: 500;
+      }
+
+      textarea,
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid rgba(0, 216, 255, 0.3);
+        background-color: rgba(16, 43, 92, 0.5);
+        color: #eaeaea;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+
+      textarea:focus,
+      input:focus {
+        outline: none;
+        border-color: #00d8ff;
+        box-shadow: 0 0 15px rgba(0, 216, 255, 0.3);
+        background-color: rgba(16, 43, 92, 0.8);
+      }
+
+      textarea::placeholder,
+      input::placeholder {
+        color: rgba(234, 234, 234, 0.6);
+      }
+
+      /* ==========================
+         BUTTON
+         ========================== */
+      .detect-btn {
+        padding: 0.85rem 2rem;
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        align-self: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 216, 255, 0.3);
+      }
+
+      .detect-btn:hover {
+        background: linear-gradient(135deg, #00b8d4 0%, #3a5fff 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 216, 255, 0.5);
+      }
+
+      /* ==========================
+         RESULT BOX
+         ========================== */
+      .result-box {
+        margin-top: 2rem;
+        padding: 2rem;
+        border-radius: 20px;
+        background: linear-gradient(
+          135deg,
+          rgba(16, 43, 92, 0.8) 0%,
+          rgba(10, 31, 68, 0.8) 100%
+        );
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .result-box h3 {
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .error-text {
+        color: #ff2d95;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+      }
+
+      .success-text {
+        color: #00d8ff;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+      }
+
+      /* ==========================
+         EMAIL SCAN RESULTS - UPDATED CARD STYLE
+         ========================== */
+      .email-cards-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .email-result-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(240, 240, 240, 0.95) 100%
+        );
+        padding: 1.5rem;
+        border-radius: 12px;
+        border-left: 4px solid;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        color: #333;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .email-result-card.phishing {
+        border-left-color: #e74c3c;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 235, 235, 0.95) 0%,
+          rgba(255, 220, 220, 0.95) 100%
+        );
+      }
+
+      .email-result-card.safe {
+        border-left-color: #27ae60;
+        background: linear-gradient(
+          135deg,
+          rgba(235, 255, 235, 0.95) 0%,
+          rgba(220, 255, 220, 0.95) 100%
+        );
+      }
+
+      .email-result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .email-header {
+        margin-bottom: 1rem;
+      }
+
+      .email-header p {
+        margin: 0.3rem 0;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .email-header strong {
+        color: #333;
+        font-weight: 600;
+      }
+
+      .email-snippet {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .email-snippet p {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.4;
+        margin: 0;
+      }
+
+      .email-status {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.5rem;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .phishing-badge {
+        background: #e74c3c;
+        color: white;
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+      }
+
+      .safe-badge {
+        background: #27ae60;
+        color: white;
+        box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+      }
+
+      .expand-btn {
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        border: 1px solid #00d8ff;
+        background: transparent;
+        color: #00d8ff;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .expand-btn:hover {
+        background: #00d8ff;
+        color: white;
+        transform: scale(1.02);
+      }
+
+      .email-full-content {
+        margin-top: 1rem;
+        background: rgba(0, 0, 0, 0.03);
+        padding: 1rem;
+        border-radius: 8px;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .email-full-content pre {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        color: #555;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      .divider {
+        border: 0;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0.75rem 0;
+      }
+
+      /* Optional staggered animation for multiple cards */
+      .email-result-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .email-result-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .email-result-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .email-result-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .email-result-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      /* ==========================
+         ERROR MESSAGE
+         ========================== */
+      .error-message {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 45, 149, 0.1) 0%,
+          rgba(255, 45, 149, 0.05) 100%
+        );
+        border: 1px solid rgba(255, 45, 149, 0.3);
+        border-radius: 12px;
+        color: #ff2d95;
+        font-weight: 500;
+      }
+
+      /* ==========================
+         ANIMATIONS
+         ========================== */
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        0% {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* ==========================
+         RESPONSIVE DESIGN
+         ========================== */
+      @media (max-width: 768px) {
+        .dashboard-container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        .navbar {
+          padding: 1rem;
+        }
+
+        .nav-links {
+          gap: 0.75rem;
+        }
+
+        .nav-links a {
+          font-size: 0.9rem;
+        }
+
+        .email-result-card {
+          padding: 1.25rem;
+        }
+
+        .card-content h1 {
+          font-size: 1.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <nav class="navbar dashboard-nav">
-        <div class="nav-brand">
-            <h2>🎣 Phishing Detector</h2>
-        </div>
-        <div class="nav-links">
-            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
-            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ url_for('sms_detector') }}" class="nav-link">SMS Detector</a>
-            <a href="{{ url_for('phishing_detector') }}" class="nav-link active">Phishing Detector</a>
-        </div>
+      <div class="nav-brand">
+        <h2>🎣 Phishing Detector</h2>
+      </div>
+      <div class="nav-links">
+        {% set role = session.get('user_role') %}
+        <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+
+        {% if role in ['admin', 'analyst'] %}
+        <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+        {% endif %}
+
+        <a href="{{ url_for('sms_detector') }}" class="nav-link"
+          >SMS Detector</a
+        >
+        <a href="{{ url_for('phishing_detector') }}" class="nav-link active"
+          >Phishing Detector</a
+        >
+        {% if session.get('user_email') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+      </div>
     </nav>
 
     <div class="dashboard-container">
-        <div class="card-content">
-            <h1 class="text-center">URL & Email Phishing Scanner</h1>
-            <p class="text-center">Paste a URL or email content to check for phishing attempts.</p>
+      <div class="card-content">
+        <h1 class="text-center">URL & Email Phishing Scanner</h1>
+        <p class="text-center">
+          Paste a URL or email content to check for phishing attempts.
+        </p>
 
-            <!-- Manual URL/Email Analysis -->
-            <form method="POST" class="form-container">
-                <label for="input_data">Enter URL or Email Content:</label>
-                <textarea name="input_data" id="input_data" rows="5" placeholder="https://example.com/login?redirect=free-money" required>{{ input_data }}</textarea>
-                <button type="submit" class="detect-btn">Analyze</button>
-            </form>
+        <!-- Manual URL/Email Analysis -->
+        <form method="POST" class="form-container">
+          <label for="input_data">Enter URL or Email Content:</label>
+          <textarea
+            name="input_data"
+            id="input_data"
+            rows="5"
+            placeholder="https://example.com/login?redirect=free-money"
+            required
+          >
+{{ input_data }}</textarea
+          >
+          <button type="submit" class="detect-btn">Analyze</button>
+        </form>
 
-            {% if result and not scanned_emails %}
-            <div class="result-box" id="result-box">
-                <h3 class="text-center">Prediction Result</h3>
-                <p class="{{ 'error-text' if result.is_phishing else 'success-text' }}">
-                    {{ '🚨 PHISHING DETECTED!' if result.is_phishing else '✅ SAFE (Not Phishing)' }}
-                </p>
-                <p class="text-center">
-                    Classified as: <strong>{{ result.result_text or result.ml_label or 'Unknown' }}</strong>
-                </p>
-            </div>
-            {% endif %}
-
-            {% if error %}
-            <div class="error-message result-box">
-                <p>{{ error }}</p>
-            </div>
-            {% endif %}
-
-            <!-- Gmail Inbox Scan -->
-            <h2 class="text-center" style="margin-top: 40px">Scan Your Gmail Inbox</h2>
-            <form method="POST" class="form-container">
-                <label for="email">Gmail Address:</label>
-                <input type="email" name="email" id="email" placeholder="you@gmail.com" required />
-
-                <label for="app_password">App Password:</label>
-                <input type="password" name="app_password" id="app_password" placeholder="Enter app password" required />
-
-                <button type="submit" name="scan_inbox" value="1" class="detect-btn">Scan Inbox</button>
-            </form>
-
-            {% if scanned_emails %}
-            <div class="result-box">
-                <h3 class="individual-predictions">📧 Inbox Scan Results ({{ scanned_emails|length }} emails)</h3>
-                <div class="email-cards-container">
-                    {% for email in scanned_emails %}
-                    <div class="email-result-card {{ 'phishing' if email.result.is_phishing else 'safe' }}">
-                        <div class="email-header">
-                            <p><strong>From:</strong> {{ email.sender or "Unknown Sender" }}</p>
-                            <p><strong>Subject:</strong> {{ email.subject or "No Subject" }}</p>
-                            <p><strong>Date:</strong> {{ email.date or "Unknown Date" }}</p>
-                        </div>
-                        <div class="email-snippet">
-                            <p>{{ email.snippet|safe }}{% if email.snippet|length > 150 %}...{% endif %}</p>
-                        </div>
-                        <div class="email-status">
-                            {% if email.result.is_phishing %}
-                            <span class="status-badge phishing-badge">🚨 PHISHING</span>
-                            {% else %}
-                            <span class="status-badge safe-badge">✅ SAFE</span>
-                            {% endif %}
-                        </div>
-                        {% if email.full_content %}
-                        <div class="email-full-content" style="display:none;">
-                            <hr class="divider">
-                            <pre>{{ email.full_content|safe }}</pre>
-                        </div>
-                        <button class="expand-btn" onclick="toggleContent(this)">Show Full Email</button>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
+        {% if result and not scanned_emails %}
+        <div class="result-box" id="result-box">
+          <h3 class="text-center">Prediction Result</h3>
+          <p
+            class="{{ 'error-text' if result.is_phishing else 'success-text' }}"
+          >
+            {{ '🚨 PHISHING DETECTED!' if result.is_phishing else '✅ SAFE (Not
+            Phishing)' }}
+          </p>
+          <p class="text-center">
+            Classified as:
+            <strong
+              >{{ result.result_text or result.ml_label or 'Unknown' }}</strong
+            >
+          </p>
         </div>
+        {% endif %} {% if error %}
+        <div class="error-message result-box">
+          <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Gmail Inbox Scan -->
+        <h2 class="text-center" style="margin-top: 40px">
+          Scan Your Gmail Inbox
+        </h2>
+        <form method="POST" class="form-container">
+          <label for="email">Gmail Address:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="you@gmail.com"
+            required
+          />
+
+          <label for="app_password">App Password:</label>
+          <input
+            type="password"
+            name="app_password"
+            id="app_password"
+            placeholder="Enter app password"
+            required
+          />
+
+          <button type="submit" name="scan_inbox" value="1" class="detect-btn">
+            Scan Inbox
+          </button>
+        </form>
+
+        {% if scanned_emails %}
+        <div class="result-box">
+          <h3>Inbox Scan Results ({{ scanned_emails|length }} emails)</h3>
+          <div class="email-cards-container">
+            {% for email in scanned_emails[:3] %}
+            <div
+              class="email-result-card {{ 'phishing' if email.result.is_phishing else 'safe' }}"
+            >
+              <div class="email-header">
+                <p>
+                  <strong>From:</strong> {{ email.sender or "Unknown Sender" }}
+                </p>
+                <p>
+                  <strong>Subject:</strong> {{ email.subject or "No Subject" }}
+                </p>
+                <p><strong>Date:</strong> {{ email.date or "Unknown Date" }}</p>
+              </div>
+              <div class="email-snippet">
+                <p>{{ email.snippet|safe }}</p>
+              </div>
+              <div class="email-status">
+                {% if email.result.is_phishing %}
+                <span class="status-badge phishing-badge"
+                  >PHISHING DETECTED!</span
+                >
+                {% else %}
+                <span class="status-badge safe-badge">SAFE</span>
+                {% endif %}
+              </div>
+              {% if email.full_content %}
+              <div class="email-full-content" style="display: none">
+                <hr class="divider" />
+                <pre>{{ email.full_content|safe }}</pre>
+              </div>
+              <button class="expand-btn" onclick="toggleContent(this)">
+                Show Full Email
+              </button>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+      <div style="text-align: center">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Scanning your inbox...</div>
+      </div>
     </div>
 
     <script>
-    function toggleContent(button) {
+      function showLoading() {
+        document.getElementById("loadingOverlay").style.display = "flex";
+      }
+
+      function toggleContent(button) {
         const content = button.previousElementSibling;
-        if(content.style.display === 'none') {
-            content.style.display = 'block';
-            button.textContent = 'Hide Full Email';
+        if (content.style.display === "none") {
+          content.style.display = "block";
+          button.textContent = "Hide Full Email";
         } else {
-            content.style.display = 'none';
-            button.textContent = 'Show Full Email';
+          content.style.display = "none";
+          button.textContent = "Show Full Email";
         }
-    }
+      }
     </script>
-</body>
+  </body>
 </html>

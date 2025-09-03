@@ -1,1019 +1,1712 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cybersecurity Awareness - CyberGuard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+      /* ==========================
+         GENERAL RESET & BASE STYLES
+         ========================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #0a1f44; /* Dark Blue */
+        color: #eaeaea;
+        min-height: 100vh;
+      }
+
+      /* ==========================
+         NAVBAR
+         ========================== */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #081731; /* Slightly darker for navbar */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-radius: 0;
+        margin: 0;
+        border: none;
+      }
+
+      .navbar h2 {
+        color: #00d8ff; /* Vibrant Cyan */
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideIn 1s ease-out forwards;
+      }
+
+      .navbar .flex:first-child .w-10 {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+      }
+
+      .nav-links a,
+      .navbar .flex:last-child a {
+        color: #eaeaea;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a::after,
+      .navbar .flex:last-child a::after {
+        content: "";
+        display: block;
+        width: 0%;
+        height: 2px;
+        background: #00d8ff;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+      }
+
+      .nav-links a:hover::after,
+      .navbar .flex:last-child a:hover::after {
+        width: 100%;
+      }
+
+      .nav-links a:hover,
+      .navbar .flex:last-child a:hover {
+        color: #00d8ff;
+      }
+
+      /* ==========================
+         CARD STYLES
+         ========================== */
+      .card {
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        transition: all 0.3s ease;
+        color: #eaeaea;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 216, 255, 0.2);
+        border-color: rgba(0, 216, 255, 0.4);
+      }
+
+      /* ==========================
+         PROGRESS BARS
+         ========================== */
+      .progress-ring {
+        transform: rotate(-90deg);
+        transition: stroke-dasharray 0.6s ease-in-out;
+      }
+
+      /* ==========================
+         READING CARD
+         ========================== */
+      .reading-card {
+        background: linear-gradient(135deg, #0a1f44 0%, #102b5c 100%);
+        color: #eaeaea;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0, 216, 255, 0.3);
+      }
+
+      .reading-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 216, 255, 0.2) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        transform: translate(30px, -30px);
+      }
+
+      .reading-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        margin-bottom: 1.5rem;
+        text-align: left; /* Ensure left alignment */
+      }
+
+      .reading-content h3 {
+        text-align: left; /* Align headings to the left */
+        margin-bottom: 1rem;
+      }
+
+      .reading-content .space-y-4 {
+        text-align: left; /* Ensure paragraph content is left-aligned */
+      }
+
+      .reading-content p {
+        text-align: justify; /* Justify paragraph text for better readability */
+        line-height: 1.6; /* Improve line spacing */
+        margin-bottom: 1rem;
+      }
+
+      .reading-content strong {
+        display: inline; /* Ensure bold text flows naturally */
+      }
+      
+      .reading-content.expanded {
+        max-height : 2000px;
+      }
+
+      /* ==========================
+         CONCEPT GRID
+         ========================== */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .concept-card {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0, 216, 255, 0.3);
+      }
+
+      .concept-card:hover {
+        transform: scale(1.05) rotate(1deg);
+        box-shadow: 0 15px 30px rgba(0, 216, 255, 0.5);
+      }
+
+      .concept-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* ==========================
+         CHECKLIST ENHANCED
+         ========================== */
+      .checklist-enhanced {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+      }
+
+      .checklist-card {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0, 216, 255, 0.3);
+      }
+
+      .checklist-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(0, 216, 255, 0.5);
+      }
+
+      /* ==========================
+         VIDEO CARDS
+         ========================== */
+      .video-card {
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 216, 255, 0.2);
+      }
+
+      .video-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 216, 255, 0.3);
+        border-color: rgba(0, 216, 255, 0.4);
+      }
+
+      .video-card .p-4 h3 {
+        color: #00d8ff;
+      }
+
+      .video-card .p-4 p {
+        color: #eaeaea;
+      }
+
+      /* ==========================
+         BUTTONS
+         ========================== */
+      .btn-primary {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 216, 255, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 216, 255, 0.5);
+        background: linear-gradient(135deg, #00b8d4 0%, #3a5fff 100%);
+      }
+
+      /* ==========================
+         QUICK ACTIONS
+         ========================== */
+      .quick-action-btn {
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+        box-shadow: 0 6px 20px rgba(0, 216, 255, 0.3);
+      }
+
+      .quick-action-btn:hover {
+        box-shadow: 0 15px 30px rgba(0, 216, 255, 0.5);
+      }
+
+      /* Different gradients for variety */
+      .quick-action-btn:nth-child(1) {
+        background: linear-gradient(135deg, #00d8ff 0%, #0a1f44 100%);
+      }
+      .quick-action-btn:nth-child(2) {
+        background: linear-gradient(135deg, #ff2d95 0%, #0a1f44 100%);
+      }
+      .quick-action-btn:nth-child(3) {
+        background: linear-gradient(135deg, #3a5fff 0%, #0a1f44 100%);
+      }
+      .quick-action-btn:nth-child(4) {
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+      }
+
+      /* ==========================
+         ACHIEVEMENTS
+         ========================== */
+      .achievement-card:nth-child(1) {
+        background: linear-gradient(135deg, #ff2d95 0%, #0a1f44 100%);
+      }
+      .achievement-card:nth-child(2) {
+        background: linear-gradient(135deg, #00d8ff 0%, #0a1f44 100%);
+      }
+      .achievement-card:nth-child(3) {
+        background: linear-gradient(135deg, #3a5fff 0%, #0a1f44 100%);
+      }
+      .achievement-card:nth-child(4) {
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+      }
+
+      /* ==========================
+         PULSE ANIMATION
+         ========================== */
+      .pulse-dot {
+        animation: pulse 2s infinite;
+      }
+
+      /* ==========================
+         MODAL
+         ========================== */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 31, 68, 0.8);
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, #102b5c 0%, #0a1f44 100%);
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        animation: modalFadeIn 0.3s ease;
+        border: 1px solid rgba(0, 216, 255, 0.3);
+        color: #eaeaea;
+      }
+
+      /* ==========================
+         GRADIENT TEXT
+         ========================== */
+      .gradient-text {
+        background: linear-gradient(135deg, #00d8ff 0%, #ff2d95 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ==========================
+         ANIMATIONS
+         ========================== */
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
         }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        100% {
+          opacity: 1;
+          transform: translateY(0);
         }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        0% {
+          transform: translateX(-50px);
+          opacity: 0;
         }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        100% {
+          transform: translateX(0);
+          opacity: 1;
         }
-        
-        .navbar {
-            background: rgba(26, 32, 44, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 1.5rem 2rem;
-            border-radius: 20px;
-            margin: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
         }
-        
-        .progress-ring {
-            transform: rotate(-90deg);
-            transition: stroke-dasharray 0.6s ease-in-out;
+        50% {
+          transform: translateY(-20px) rotate(180deg);
         }
-        
-        .reading-card {
-            background: linear-gradient(135deg, rgb(44, 37, 48) 0%, #764ba2 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
         }
-        
-        .reading-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
         }
-        
-        .concept-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+        100% {
+          transform: scale(1);
+          opacity: 1;
         }
-        
-        .concept-card {
-            background: linear-gradient(135deg, #667eea 0%, #561e8d 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
         }
-        
-        .concept-card:hover {
-            transform: scale(1.05) rotate(1deg);
+        to {
+          opacity: 1;
+          transform: scale(1);
         }
-        
-        .concept-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
+      }
+
+      .icon-bounce {
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
         }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+        40% {
+          transform: translateY(-10px);
         }
-        
-        .checklist-enhanced {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
+        60% {
+          transform: translateY(-5px);
         }
-        
-        .checklist-card {
-            background: linear-gradient(135deg, #667eea 0%, #561e8d 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .checklist-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(79, 172, 254, 0.3);
-        }
-        
-        .reading-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-        
-        .reading-content.expanded {
-            max-height: 2000px;
-        }
-        
-        .video-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .video-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .pulse-dot {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            animation: modalFadeIn 0.3s ease;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .icon-bounce {
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+      }
+
+      /* ==========================
+         QUIZ & SIMULATION STYLES
+         ========================== */
+      #quiz-container,
+      #simulation-container {
+        border-color: rgba(0, 216, 255, 0.3);
+        background: linear-gradient(
+          135deg,
+          rgba(16, 43, 92, 0.5) 0%,
+          rgba(10, 31, 68, 0.5) 100%
+        );
+      }
+
+      #quiz-container button,
+      #simulation-container button {
+        border-color: rgba(0, 216, 255, 0.3);
+        background: transparent;
+        color: #eaeaea;
+        transition: all 0.3s ease;
+      }
+
+      #quiz-container button:hover,
+      #simulation-container button:hover {
+        border-color: #00d8ff;
+        background: rgba(0, 216, 255, 0.1);
+        color: #00d8ff;
+      }
+
+      /* Success states */
+      .bg-green-100 {
+        background: rgba(76, 175, 80, 0.2) !important;
+        border-color: #4caf50 !important;
+        color: #4caf50 !important;
+      }
+
+      /* Error states */
+      .bg-red-100 {
+        background: rgba(244, 67, 54, 0.2) !important;
+        border-color: #f44336 !important;
+        color: #f44336 !important;
+      }
+
+      /* Progress bars */
+      .bg-gradient-to-r {
+        background: linear-gradient(90deg, #00d8ff 0%, #3a5fff 100%) !important;
+      }
+
+      /* Green progress variant */
+      .from-green-500 {
+        background: linear-gradient(90deg, #4caf50 0%, #00d8ff 100%) !important;
+      }
     </style>
-</head>
-<body>
-    <nav class="navbar glass-effect">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <span class="text-white font-bold">🛡️</span>
-            </div>
-            <h2 class="text-xl font-bold">CyberGuard Academy</h2>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="flex items-center space-x-3">
+        <div
+          class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
+        >
+          <span class="text-white font-bold">🛡️</span>
         </div>
-        <div class="flex space-x-6">
-    <a href="/" class="nav-link hover:text-blue-300 transition-colors duration-200">Home</a>
-    <a href="/dashboard" class="nav-link hover:text-blue-300 transition-colors duration-200">Dashboard</a>
-    <a href="/sms_detector" class="nav-link hover:text-blue-300 transition-colors duration-200">SMS Detector</a>
-    <a href="/phishing_detector" class="nav-link hover:text-blue-300 transition-colors duration-200">Phishing Detector</a>
-</div>
+        <h2 class="text-xl font-bold">
+          <i class="fa-sharp fa-solid fa-shield-halved"></i>
+          CyberGuardian
+        </h2>
+      </div>
+      <div class="flex space-x-6">
+        {% set role = session.get('user_role') %}
+        <a
+          href="/"
+          class="nav-link hover:text-blue-300 transition-colors duration-200"
+          >Home</a
+        >
+
+        {% if role in ['admin', 'analyst'] %}
+        <a
+          href="/dashboard"
+          class="nav-link hover:text-blue-300 transition-colors duration-200"
+          >Dashboard</a
+        >
+        {% endif %}
+
+        <a
+          href="/sms_detector"
+          class="nav-link hover:text-blue-300 transition-colors duration-200"
+          >SMS Detector</a
+        >
+        <a
+          href="/phishing_detector"
+          class="nav-link hover:text-blue-300 transition-colors duration-200"
+          >Phishing Detector</a
+        >
+        {% if session.get('user_email') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+      </div>
     </nav>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Progress Overview -->
-        <div class="card">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl font-bold gradient-text">My Learning Journey</h1>
-                <div class="flex items-center space-x-4">
-                    <div class="pulse-dot w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span class="text-sm text-gray-600">Learning Active</span>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="font-medium text-gray-700">Quiz Mastery</span>
-                        <span id="quiz-progress-text" class="font-bold text-blue-600">0%</span>
-                    </div>
-                    <div class="relative">
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div id="quiz-progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full transition-all duration-700" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="font-medium text-gray-700">Simulation Experience</span>
-                        <span id="simulations-progress-text" class="font-bold text-green-600">0%</span>
-                    </div>
-                    <div class="relative">
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div id="simulations-progress-bar" class="bg-gradient-to-r from-green-500 to-teal-500 h-4 rounded-full transition-all duration-700" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Progress Overview -->
+      <div class="card">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-3xl font-bold gradient-text">My Learning Journey</h1>
+          <div class="flex items-center space-x-4">
+            <div class="pulse-dot w-3 h-3 bg-green-500 rounded-full"></div>
+            <span class="text-sm text-gray-300">Learning Active</span>
+          </div>
         </div>
 
-        <!-- Educational Videos -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">🎬</span>
-                Educational Videos
-            </h2>
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
-                <div class="video-card">
-                    <div class="p-4">
-                        <h3 class="font-bold text-gray-800 mb-2">Types of Cyber Attacks</h3>
-                        <p class="text-sm text-gray-600 mb-3">Learn about different attack vectors and how to recognize them</p>
-                    </div>
-                    <div class="relative pb-[56.25%]">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/Dk-ZqQ-bfy4?si=upA1C4KTqUjCP_YD" title="Types of Cyber Attacks" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
-                
-                <div class="video-card">
-                    <div class="p-4">
-                        <h3 class="font-bold text-gray-800 mb-2">Understanding Phishing</h3>
-                        <p class="text-sm text-gray-600 mb-3">A comprehensive guide to identifying phishing attempts</p>
-                    </div>
-                    <div class="relative pb-[56.25%]">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/XBkzBrXlle0?si=vCOE5ofAMueiojT3" title="What is Phishing?" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
-                
-                <div class="video-card">
-                    <div class="p-4">
-                        <h3 class="font-bold text-gray-800 mb-2">Password Security</h3>
-                        <p class="text-sm text-gray-600 mb-3">Best practices for creating and managing secure passwords</p>
-                    </div>
-                    <div class="relative pb-[56.25%]">
-                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/t8SQo3R7qeU?si=hyBbr_DltsUPMTJl" title="Password Security" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-gray-300">Quiz Mastery</span>
+              <span id="quiz-progress-text" class="font-bold text-cyan-400"
+                >0%</span
+              >
             </div>
-        </div>
+            <div class="relative">
+              <div class="w-full bg-gray-700 rounded-full h-4">
+                <div
+                  id="quiz-progress-bar"
+                  class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full transition-all duration-700"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
 
-        <!-- Reading Module -->
-        <div class="card reading-card relative">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-gray-300"
+                >Simulation Experience</span
+              >
+              <span
+                id="simulations-progress-text"
+                class="font-bold text-green-400"
+                >0%</span
+              >
+            </div>
+            <div class="relative">
+              <div class="w-full bg-gray-700 rounded-full h-4">
+                <div
+                  id="simulations-progress-bar"
+                  class="bg-gradient-to-r from-green-500 to-teal-500 h-4 rounded-full transition-all duration-700"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Videos -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">🎬</span>
+          Educational Videos
+        </h2>
+        <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div class="video-card">
+            <div class="p-4">
+              <h3 class="font-bold mb-2">Types of Cyber Attacks</h3>
+              <p class="text-sm mb-3">
+                Learn about different attack vectors and how to recognize them
+              </p>
+            </div>
+            <div class="relative pb-[56.25%]">
+              <iframe
+                class="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/Dk-ZqQ-bfy4?si=upA1C4KTqUjCP_YD"
+                title="Types of Cyber Attacks"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="video-card">
+            <div class="p-4">
+              <h3 class="font-bold mb-2">Understanding Phishing</h3>
+              <p class="text-sm mb-3">
+                A comprehensive guide to identifying phishing attempts
+              </p>
+            </div>
+            <div class="relative pb-[56.25%]">
+              <iframe
+                class="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/XBkzBrXlle0?si=vCOE5ofAMueiojT3"
+                title="What is Phishing?"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="video-card">
+            <div class="p-4">
+              <h3 class="font-bold mb-2">Password Security</h3>
+              <p class="text-sm mb-3">
+                Best practices for creating and managing secure passwords
+              </p>
+            </div>
+            <div class="relative pb-[56.25%]">
+              <iframe
+                class="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/t8SQo3R7qeU?si=hyBbr_DltsUPMTJl"
+                title="Password Security"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reading Module -->
+      <div class="card reading-card relative">
+        <div class="relative z-10">
+          <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+            <span class="mr-3">📚</span>
+            Cybersecurity Reading Hub
+          </h2>
+          <p class="text-gray-300 mb-6">
+            Dive deeper into cybersecurity concepts with our curated reading
+            materials and interactive content.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <button
+              onclick="toggleReading('threats')"
+              class="btn-primary flex items-center justify-center space-x-2"
+            >
+              <span>🔍</span>
+              <span>Threat Landscape</span>
+            </button>
+            <button
+              onclick="toggleReading('defense')"
+              class="btn-primary flex items-center justify-center space-x-2"
+            >
+              <span>🛡️</span>
+              <span>Defense Strategies</span>
+            </button>
+            <button
+              onclick="toggleReading('trends')"
+              class="btn-primary flex items-center justify-center space-x-2"
+            >
+              <span>📈</span>
+              <span>Latest Trends</span>
+            </button>
+          </div>
+
+          <div
+            id="reading-threats"
+            class="reading-content bg-black/20 rounded-lg p-6 backdrop-blur-sm border border-cyan-500/30"
+          >
+            <h3 class="text-xl font-bold mb-4 text-cyan-400">
+              Current Threat Landscape
+            </h3>
+            <div class="space-y-4 text-gray-300">
+              <p>
+                <strong class="text-cyan-400">Ransomware Evolution:</strong>
+                Modern ransomware attacks have become more sophisticated,
+                targeting critical infrastructure and using double extortion
+                techniques where attackers both encrypt data and threaten to
+                leak sensitive information.
+              </p>
+              <p>
+                <strong class="text-cyan-400">AI-Powered Attacks:</strong>
+                Cybercriminals are leveraging artificial intelligence to create
+                more convincing phishing emails, deepfake audio/video for social
+                engineering, and automated vulnerability scanning.
+              </p>
+              <p>
+                <strong class="text-cyan-400">Supply Chain Attacks:</strong>
+                Attackers increasingly target software supply chains,
+                compromising trusted vendors to gain access to multiple
+                organizations simultaneously.
+              </p>
+              <p>
+                <strong class="text-cyan-400"
+                  >Cloud Security Challenges:</strong
+                >
+                As organizations migrate to cloud services, misconfigurations
+                and inadequate access controls have become primary attack
+                vectors.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="reading-defense"
+            class="reading-content bg-black/20 rounded-lg p-6 backdrop-blur-sm border border-cyan-500/30"
+          >
+            <h3 class="text-xl font-bold mb-4 text-cyan-400">
+              Defense Strategies & Best Practices
+            </h3>
+            <div class="space-y-4 text-gray-300">
+              <p>
+                <strong class="text-cyan-400">Zero Trust Architecture:</strong>
+                Implement a "never trust, always verify" approach where every
+                user and device must be authenticated and authorized before
+                accessing resources.
+              </p>
+              <p>
+                <strong class="text-cyan-400"
+                  >Multi-Factor Authentication:</strong
+                >
+                Use multiple verification methods including something you know
+                (password), something you have (phone), and something you are
+                (biometrics).
+              </p>
+              <p>
+                <strong class="text-cyan-400"
+                  >Security Awareness Training:</strong
+                >
+                Regular training helps employees recognize and respond
+                appropriately to social engineering attempts and suspicious
+                activities.
+              </p>
+              <p>
+                <strong class="text-cyan-400"
+                  >Incident Response Planning:</strong
+                >
+                Develop and regularly test incident response procedures to
+                minimize damage and recovery time when breaches occur.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="reading-trends"
+            class="reading-content bg-black/20 rounded-lg p-6 backdrop-blur-sm border border-cyan-500/30"
+          >
+            <h3 class="text-xl font-bold mb-4 text-cyan-400">
+              Emerging Trends & Technologies
+            </h3>
+            <div class="space-y-4 text-gray-300">
+              <p>
+                <strong class="text-cyan-400">Quantum Computing Impact:</strong>
+                While still emerging, quantum computing poses future threats to
+                current encryption methods, driving development of
+                quantum-resistant cryptography.
+              </p>
+              <p>
+                <strong class="text-cyan-400">IoT Security:</strong> The
+                proliferation of Internet of Things devices creates new attack
+                surfaces, requiring specialized security considerations for
+                connected devices.
+              </p>
+              <p>
+                <strong class="text-cyan-400">Behavioral Analytics:</strong>
+                Advanced systems now use machine learning to detect anomalous
+                user behavior patterns that might indicate compromised accounts.
+              </p>
+              <p>
+                <strong class="text-cyan-400">Privacy-First Security:</strong>
+                New approaches balance security monitoring with user privacy
+                through techniques like differential privacy and homomorphic
+                encryption.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Section -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">🧠</span>
+          Knowledge Assessment Quiz
+        </h2>
+        <div id="quiz-section">
+          <div
+            id="quiz-container"
+            class="border-2 border-dashed rounded-xl p-8 text-center"
+          >
+            <div id="quiz-content">
+              <div class="mb-6">
+                <div
+                  class="w-20 h-20 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <span class="text-2xl">🎯</span>
+                </div>
+              </div>
+              <p class="text-gray-300 mb-6 text-lg">
+                Ready to test your cybersecurity knowledge? Our interactive quiz
+                covers phishing, social engineering, and security best
+                practices.
+              </p>
+              <button id="start-quiz-btn" class="btn-primary text-lg px-8 py-3">
+                Begin Assessment
+              </button>
+            </div>
+          </div>
+          <p
+            id="quiz-score"
+            class="text-center mt-6 text-gray-300 font-medium hidden"
+          ></p>
+        </div>
+      </div>
+
+      <!-- Simulations Section -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">🎮</span>
+          Interactive Security Simulations
+        </h2>
+        <div id="simulation-section">
+          <div
+            id="simulation-container"
+            class="border-2 border-dashed rounded-xl p-8 text-center"
+          >
+            <div id="simulation-content">
+              <div class="mb-6">
+                <div
+                  class="w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <span class="text-2xl">🔐</span>
+                </div>
+              </div>
+              <p class="text-gray-300 mb-6 text-lg">
+                Practice identifying threats in realistic scenarios. Experience
+                hands-on learning with our interactive simulations.
+              </p>
+              <button id="start-sim-btn" class="btn-primary text-lg px-8 py-3">
+                Launch Simulations
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Security Tips -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">⚡</span>
+          Essential Security Practices
+        </h2>
+        <div class="checklist-enhanced">
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">🔐</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Two-Factor Authentication</h3>
+                <p class="text-sm text-white/90">
+                  Add an extra layer of security to your accounts with 2FA. Even
+                  if passwords are compromised, attackers cannot access your
+                  accounts.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">🔑</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Password Management</h3>
+                <p class="text-sm text-white/90">
+                  Use unique, complex passwords for each account. A password
+                  manager helps generate and store these securely.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">🕵️</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Email Vigilance</h3>
+                <p class="text-sm text-white/90">
+                  Scrutinize unexpected emails, especially those requesting
+                  personal information or urgent action.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">🌐</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">URL Verification</h3>
+                <p class="text-sm text-white/90">
+                  Always verify website URLs before entering sensitive
+                  information. Look for HTTPS and check for spelling errors.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">💾</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Data Backup</h3>
+                <p class="text-sm text-white/90">
+                  Regularly backup important files using the 3-2-1 rule: 3
+                  copies, 2 different media types, 1 offsite.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-card">
+            <div class="flex items-start space-x-4">
+              <div
+                class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+              >
+                <span class="text-sm">🔄</span>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Software Updates</h3>
+                <p class="text-sm text-white/90">
+                  Keep all software and operating systems updated with the
+                  latest security patches and versions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Cybersecurity Concepts -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">🧭</span>
+          Core Security Concepts
+        </h2>
+        <div class="concept-grid">
+          <div class="concept-card">
             <div class="relative z-10">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
-                    <span class="mr-3">📚</span>
-                    Cybersecurity Reading Hub
-                </h2>
-                <p class="text-white/90 mb-6">Dive deeper into cybersecurity concepts with our curated reading materials and interactive content.</p>
-                
-                <div class="grid md:grid-cols-3 gap-4 mb-6">
-                    <button onclick="toggleReading('threats')" class="btn-primary flex items-center justify-center space-x-2">
-                        <span>🔍</span>
-                        <span>Threat Landscape</span>
-                    </button>
-                    <button onclick="toggleReading('defense')" class="btn-primary flex items-center justify-center space-x-2">
-                        <span>🛡️</span>
-                        <span>Defense Strategies</span>
-                    </button>
-                    <button onclick="toggleReading('trends')" class="btn-primary flex items-center justify-center space-x-2">
-                        <span>📈</span>
-                        <span>Latest Trends</span>
-                    </button>
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">🦠</span>
                 </div>
-                
-                <div id="reading-threats" class="reading-content bg-white/20 rounded-lg p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold mb-4">Current Threat Landscape</h3>
-                    <div class="space-y-4 text-white/90">
-                        <p><strong>Ransomware Evolution:</strong> Modern ransomware attacks have become more sophisticated, targeting critical infrastructure and using double extortion techniques where attackers both encrypt data and threaten to leak sensitive information.</p>
-                        <p><strong>AI-Powered Attacks:</strong> Cybercriminals are leveraging artificial intelligence to create more convincing phishing emails, deepfake audio/video for social engineering, and automated vulnerability scanning.</p>
-                        <p><strong>Supply Chain Attacks:</strong> Attackers increasingly target software supply chains, compromising trusted vendors to gain access to multiple organizations simultaneously.</p>
-                        <p><strong>Cloud Security Challenges:</strong> As organizations migrate to cloud services, misconfigurations and inadequate access controls have become primary attack vectors.</p>
-                    </div>
-                </div>
-                
-                <div id="reading-defense" class="reading-content bg-white/20 rounded-lg p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold mb-4">Defense Strategies & Best Practices</h3>
-                    <div class="space-y-4 text-white/90">
-                        <p><strong>Zero Trust Architecture:</strong> Implement a "never trust, always verify" approach where every user and device must be authenticated and authorized before accessing resources.</p>
-                        <p><strong>Multi-Factor Authentication:</strong> Use multiple verification methods including something you know (password), something you have (phone), and something you are (biometrics).</p>
-                        <p><strong>Security Awareness Training:</strong> Regular training helps employees recognize and respond appropriately to social engineering attempts and suspicious activities.</p>
-                        <p><strong>Incident Response Planning:</strong> Develop and regularly test incident response procedures to minimize damage and recovery time when breaches occur.</p>
-                    </div>
-                </div>
-                
-                <div id="reading-trends" class="reading-content bg-white/20 rounded-lg p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold mb-4">Emerging Trends & Technologies</h3>
-                    <div class="space-y-4 text-white/90">
-                        <p><strong>Quantum Computing Impact:</strong> While still emerging, quantum computing poses future threats to current encryption methods, driving development of quantum-resistant cryptography.</p>
-                        <p><strong>IoT Security:</strong> The proliferation of Internet of Things devices creates new attack surfaces, requiring specialized security considerations for connected devices.</p>
-                        <p><strong>Behavioral Analytics:</strong> Advanced systems now use machine learning to detect anomalous user behavior patterns that might indicate compromised accounts.</p>
-                        <p><strong>Privacy-First Security:</strong> New approaches balance security monitoring with user privacy through techniques like differential privacy and homomorphic encryption.</p>
-                    </div>
-                </div>
+                <h3 class="text-xl font-bold">Malware</h3>
+              </div>
+              <p class="text-white/90">
+                Malicious software designed to infiltrate, damage, or gain
+                unauthorized access to computer systems. Includes viruses,
+                worms, trojans, and spyware.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Virus</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Trojan</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full">Spyware</span>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Quiz Section -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">🧠</span>
-                Knowledge Assessment Quiz
-            </h2>
-            <div id="quiz-section">
-                <div id="quiz-container" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
-                    <div id="quiz-content">
-                        <div class="mb-6">
-                            <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span class="text-2xl">🎯</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-6 text-lg">Ready to test your cybersecurity knowledge? Our interactive quiz covers phishing, social engineering, and security best practices.</p>
-                        <button id="start-quiz-btn" class="btn-primary text-lg px-8 py-3">Begin Assessment</button>
-                    </div>
+          <div class="concept-card">
+            <div class="relative z-10">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">💰</span>
                 </div>
-                <p id="quiz-score" class="text-center mt-6 text-gray-700 font-medium hidden"></p>
+                <h3 class="text-xl font-bold">Ransomware</h3>
+              </div>
+              <p class="text-white/90">
+                Malware that encrypts victim's files and demands payment for
+                decryption keys. Often spreads through phishing emails or
+                exploiting system vulnerabilities.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Encryption</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full">Payment</span>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Simulations Section -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">🎮</span>
-                Interactive Security Simulations
-            </h2>
-            <div id="simulation-section">
-                <div id="simulation-container" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
-                    <div id="simulation-content">
-                        <div class="mb-6">
-                            <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span class="text-2xl">🔍</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-6 text-lg">Practice identifying threats in realistic scenarios. Experience hands-on learning with our interactive simulations.</p>
-                        <button id="start-sim-btn" class="btn-primary text-lg px-8 py-3">Launch Simulations</button>
-                    </div>
+          <div class="concept-card">
+            <div class="relative z-10">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">🎣</span>
                 </div>
+                <h3 class="text-xl font-bold">Phishing</h3>
+              </div>
+              <p class="text-white/90">
+                Fraudulent attempts to obtain sensitive information by
+                disguising as trustworthy entities in electronic communications
+                like emails or text messages.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Email</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2">SMS</span>
+                <span class="bg-white/20 px-2 py-1 rounded-full">Spoofing</span>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Enhanced Security Tips -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">⚡</span>
-                Essential Security Practices
-            </h2>
-            <div class="checklist-enhanced">
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">🔐</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Two-Factor Authentication</h3>
-                            <p class="text-sm text-white/90">Add an extra layer of security to your accounts with 2FA. Even if passwords are compromised, attackers cannot access your accounts.</p>
-                        </div>
-                    </div>
+          <div class="concept-card">
+            <div class="relative z-10">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">🧠</span>
                 </div>
-                
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">🔑</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Password Management</h3>
-                            <p class="text-sm text-white/90">Use unique, complex passwords for each account. A password manager helps generate and store these securely.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">🕵️</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Email Vigilance</h3>
-                            <p class="text-sm text-white/90">Scrutinize unexpected emails, especially those requesting personal information or urgent action.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">🌐</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">URL Verification</h3>
-                            <p class="text-sm text-white/90">Always verify website URLs before entering sensitive information. Look for HTTPS and check for spelling errors.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">💾</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Data Backup</h3>
-                            <p class="text-sm text-white/90">Regularly backup important files using the 3-2-1 rule: 3 copies, 2 different media types, 1 offsite.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="checklist-card">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span class="text-sm">🔄</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-2">Software Updates</h3>
-                            <p class="text-sm text-white/90">Keep all software and operating systems updated with the latest security patches and versions.</p>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-xl font-bold">Social Engineering</h3>
+              </div>
+              <p class="text-white/90">
+                Psychological manipulation techniques used to trick people into
+                divulging confidential information or performing actions that
+                compromise security.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Psychology</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full"
+                  >Manipulation</span
+                >
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Enhanced Cybersecurity Concepts -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">🧭</span>
-                Core Security Concepts
-            </h2>
-            <div class="concept-grid">
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">🦠</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Malware</h3>
-                        </div>
-                        <p class="text-white/90">Malicious software designed to infiltrate, damage, or gain unauthorized access to computer systems. Includes viruses, worms, trojans, and spyware.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Virus</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Trojan</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Spyware</span>
-                        </div>
-                    </div>
+          <div class="concept-card">
+            <div class="relative z-10">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">🔓</span>
                 </div>
-                
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">💰</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Ransomware</h3>
-                        </div>
-                        <p class="text-white/90">Malware that encrypts victim's files and demands payment for decryption keys. Often spreads through phishing emails or exploiting system vulnerabilities.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Encryption</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Payment</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">🎣</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Phishing</h3>
-                        </div>
-                        <p class="text-white/90">Fraudulent attempts to obtain sensitive information by disguising as trustworthy entities in electronic communications like emails or text messages.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Email</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">SMS</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Spoofing</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">🧠</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Social Engineering</h3>
-                        </div>
-                        <p class="text-white/90">Psychological manipulation techniques used to trick people into divulging confidential information or performing actions that compromise security.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Psychology</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Manipulation</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">🔓</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Data Breach</h3>
-                        </div>
-                        <p class="text-white/90">Unauthorized access to confidential data, often resulting in theft of personal information, financial data, or intellectual property.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Unauthorized</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Data Theft</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="concept-card">
-                    <div class="relative z-10">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                                <span class="text-xl">🔥</span>
-                            </div>
-                            <h3 class="text-xl font-bold">Firewall</h3>
-                        </div>
-                        <p class="text-white/90">Network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.</p>
-                        <div class="mt-4 text-sm text-white/70">
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Network</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full mr-2">Filter</span>
-                            <span class="bg-white/20 px-2 py-1 rounded-full">Protection</span>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-xl font-bold">Data Breach</h3>
+              </div>
+              <p class="text-white/90">
+                Unauthorized access to confidential data, often resulting in
+                theft of personal information, financial data, or intellectual
+                property.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Unauthorized</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full"
+                  >Data Theft</span
+                >
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Learning Achievements -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">🏆</span>
-                Learning Achievements
-            </h2>
-            <div class="grid md:grid-cols-4 gap-4">
-                <div class="text-center p-4 bg-gradient-to-br from-black to-orange-500 rounded-xl text-white">
-                    <div class="text-3xl mb-2">🥇</div>
-                    <h3 class="font-bold">Quiz Master</h3>
-                    <p class="text-sm text-white/90">Complete all quizzes</p>
+          <div class="concept-card">
+            <div class="relative z-10">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <span class="text-xl">🔥</span>
                 </div>
-                <div class="text-center p-4 bg-gradient-to-br from-black to-blue-500 rounded-xl text-white">
-                    <div class="text-3xl mb-2">🎯</div>
-                    <h3 class="font-bold">Threat Hunter</h3>
-                    <p class="text-sm text-white/90">Complete simulations</p>
-                </div>
-                <div class="text-center p-4 bg-gradient-to-br from-black to-pink-500 rounded-xl text-white">
-                    <div class="text-3xl mb-2">📚</div>
-                    <h3 class="font-bold">Knowledge Seeker</h3>
-                    <p class="text-sm text-white/90">Read all modules</p>
-                </div>
-                <div class="text-center p-4 bg-gradient-to-br from-black to-yellow-500 rounded-xl text-white">
-                    <div class="text-3xl mb-2">🛡️</div>
-                    <h3 class="font-bold">Cyber Guardian</h3>
-                    <p class="text-sm text-white/90">Complete everything</p>
-                </div>
+                <h3 class="text-xl font-bold">Firewall</h3>
+              </div>
+              <p class="text-white/90">
+                Network security system that monitors and controls incoming and
+                outgoing network traffic based on predetermined security rules.
+              </p>
+              <div class="mt-4 text-sm text-white/70">
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Network</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full mr-2"
+                  >Filter</span
+                >
+                <span class="bg-white/20 px-2 py-1 rounded-full"
+                  >Protection</span
+                >
+              </div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Quick Actions -->
-        <div class="card">
-            <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                <span class="icon-bounce mr-3">⚡</span>
-                Quick Security Actions
-            </h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <button class="bg-gradient-to-r from-blue-500 to-black text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2">
-                    <span class="text-2xl">📱</span>
-                    <span class="font-semibold">Check SMS</span>
-                    <span class="text-xs text-white/80">Analyze suspicious texts</span>
-                </button>
-                <button class="bg-gradient-to-r from-purple-500 to-black text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2">
-                    <span class="text-2xl">📧</span>
-                    <span class="font-semibold">Scan Email</span>
-                    <span class="text-xs text-white/80">Detect phishing attempts</span>
-                </button>
-                <button class="bg-gradient-to-r from-green-500 to-black text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2">
-                    <span class="text-2xl">🔒</span>
-                    <span class="font-semibold">Password Check</span>
-                    <span class="text-xs text-white/80">Test password strength</span>
-                </button>
-                <button class="bg-gradient-to-r from-orange-500 to-black text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2">
-                    <span class="text-2xl">📊</span>
-                    <span class="font-semibold">Security Report</span>
-                    <span class="text-xs text-white/80">View your status</span>
-                </button>
-            </div>
+      <!-- Learning Achievements -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">🏆</span>
+          Learning Achievements
+        </h2>
+        <div class="grid md:grid-cols-4 gap-4">
+          <div class="achievement-card text-center p-4 rounded-xl text-white">
+            <div class="text-3xl mb-2">🥇</div>
+            <h3 class="font-bold">Quiz Master</h3>
+            <p class="text-sm text-white/90">Complete all quizzes</p>
+          </div>
+          <div class="achievement-card text-center p-4 rounded-xl text-white">
+            <div class="text-3xl mb-2">🎯</div>
+            <h3 class="font-bold">Threat Hunter</h3>
+            <p class="text-sm text-white/90">Complete simulations</p>
+          </div>
+          <div class="achievement-card text-center p-4 rounded-xl text-white">
+            <div class="text-3xl mb-2">📚</div>
+            <h3 class="font-bold">Knowledge Seeker</h3>
+            <p class="text-sm text-white/90">Read all modules</p>
+          </div>
+          <div class="achievement-card text-center p-4 rounded-xl text-white">
+            <div class="text-3xl mb-2">🛡️</div>
+            <h3 class="font-bold">Cyber Guardian</h3>
+            <p class="text-sm text-white/90">Complete everything</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h2 class="text-2xl font-bold gradient-text mb-6 flex items-center">
+          <span class="icon-bounce mr-3">⚡</span>
+          Quick Security Actions
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            class="quick-action-btn text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2"
+          >
+            <span class="text-2xl">📱</span>
+            <span class="font-semibold">Check SMS</span>
+            <span class="text-xs text-white/80">Analyze suspicious texts</span>
+          </button>
+          <button
+            class="quick-action-btn text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2"
+          >
+            <span class="text-2xl">📧</span>
+            <span class="font-semibold">Scan Email</span>
+            <span class="text-xs text-white/80">Detect phishing attempts</span>
+          </button>
+          <button
+            class="quick-action-btn text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2"
+          >
+            <span class="text-2xl">🔒</span>
+            <span class="font-semibold">Password Check</span>
+            <span class="text-xs text-white/80">Test password strength</span>
+          </button>
+          <button
+            class="quick-action-btn text-white p-4 rounded-xl hover:scale-105 transition-all duration-300 flex flex-col items-center space-y-2"
+          >
+            <span class="text-2xl">📊</span>
+            <span class="font-semibold">Security Report</span>
+            <span class="text-xs text-white/80">View your status</span>
+          </button>
+        </div>
+      </div>
     </div>
 
-    
+    <!-- Modal for alerts -->
+    <div id="alert-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+          <h3 id="modal-title" class="text-xl font-bold text-cyan-400"></h3>
+          <button
+            id="modal-close-btn"
+            class="text-gray-400 hover:text-white text-2xl"
+          >
+            &times;
+          </button>
+        </div>
+        <p id="modal-message" class="text-gray-300 mb-6"></p>
+        <button onclick="closeModal()" class="btn-primary w-full">Close</button>
+      </div>
+    </div>
+
     <script>
-        // Quiz and Simulation Data
-        const quizQuestions = [
-            {
-                question: "What is the most common way phishing attacks are delivered?",
-                options: ["Email", "Text message", "Phone call", "Social media"],
-                correct: 0,
-                explanation: "Email remains the most common delivery method for phishing attacks, accounting for over 90% of all phishing attempts."
-            },
-            {
-                question: "Which of these is a red flag in a suspicious email?",
-                options: ["Personalized greeting", "Urgent action required", "Company logo", "Professional formatting"],
-                correct: 1,
-                explanation: "Urgent action required is a classic phishing tactic designed to pressure victims into acting without thinking."
-            },
-            {
-                question: "What should you do if you receive a suspicious email?",
-                options: ["Click to investigate", "Forward to friends", "Report and delete", "Reply asking if it's real"],
-                correct: 2,
-                explanation: "The safest approach is to report suspicious emails to your IT department and delete them without clicking any links."
-            },
-            {
-                question: "What makes a strong password?",
-                options: ["Personal information", "Long and complex", "Easy to remember", "Same across accounts"],
-                correct: 1,
-                explanation: "Strong passwords are long, complex, and unique to each account. They should include a mix of characters."
-            },
-            {
-                question: "What is two-factor authentication?",
-                options: ["Two passwords", "Password + second verification", "Biometric only", "Security questions"],
-                correct: 1,
-                explanation: "2FA requires both something you know (password) and something you have (phone, token) or are (biometrics)."
-            }
-        ];
+      // Quiz and Simulation Data
+      const quizQuestions = [
+        {
+          question:
+            "What is the most common way phishing attacks are delivered?",
+          options: ["Email", "Text message", "Phone call", "Social media"],
+          correct: 0,
+          explanation:
+            "Email remains the most common delivery method for phishing attacks, accounting for over 90% of all phishing attempts.",
+        },
+        {
+          question: "Which of these is a red flag in a suspicious email?",
+          options: [
+            "Personalized greeting",
+            "Urgent action required",
+            "Company logo",
+            "Professional formatting",
+          ],
+          correct: 1,
+          explanation:
+            "Urgent action required is a classic phishing tactic designed to pressure victims into acting without thinking.",
+        },
+        {
+          question: "What should you do if you receive a suspicious email?",
+          options: [
+            "Click to investigate",
+            "Forward to friends",
+            "Report and delete",
+            "Reply asking if it's real",
+          ],
+          correct: 2,
+          explanation:
+            "The safest approach is to report suspicious emails to your IT department and delete them without clicking any links.",
+        },
+        {
+          question: "What makes a strong password?",
+          options: [
+            "Personal information",
+            "Long and complex",
+            "Easy to remember",
+            "Same across accounts",
+          ],
+          correct: 1,
+          explanation:
+            "Strong passwords are long, complex, and unique to each account. They should include a mix of characters.",
+        },
+        {
+          question: "What is two-factor authentication?",
+          options: [
+            "Two passwords",
+            "Password + second verification",
+            "Biometric only",
+            "Security questions",
+          ],
+          correct: 1,
+          explanation:
+            "2FA requires both something you know (password) and something you have (phone, token) or are (biometrics).",
+        },
+      ];
 
-        const simulations = [
-            {
-                scenario: "You receive an email from your 'bank' asking you to verify your account by clicking a link. What do you do?",
-                choices: [
-                    "Click the link immediately",
-                    "Call the bank directly using their official number",
-                    "Reply to the email asking for verification",
-                    "Forward the email to friends for advice"
-                ],
-                correct: 1,
-                explanation: "Always verify suspicious requests through official channels. Banks never ask for sensitive information via email."
-            },
-            {
-                scenario: "A popup appears claiming your computer is infected and provides a phone number to call for help. Your response?",
-                choices: [
-                    "Call the number immediately",
-                    "Close the popup and run legitimate antivirus",
-                    "Click 'OK' to remove the virus",
-                    "Download their recommended software"
-                ],
-                correct: 1,
-                explanation: "Legitimate security warnings come from your installed antivirus software, not random popups."
-            },
-            {
-                scenario: "You get a text message saying you've won a prize and need to click a link to claim it. What's your move?",
-                choices: [
-                    "Click the link to see what you won",
-                    "Delete the message",
-                    "Reply 'STOP' to unsubscribe",
-                    "Share the good news on social media"
-                ],
-                correct: 1,
-                explanation: "Unsolicited prize notifications are almost always scams. Delete these messages without clicking anything."
-            }
-        ];
+      const simulations = [
+        {
+          scenario:
+            "You receive an email from your 'bank' asking you to verify your account by clicking a link. What do you do?",
+          choices: [
+            "Click the link immediately",
+            "Call the bank directly using their official number",
+            "Reply to the email asking for verification",
+            "Forward the email to friends for advice",
+          ],
+          correct: 1,
+          explanation:
+            "Always verify suspicious requests through official channels. Banks never ask for sensitive information via email.",
+        },
+        {
+          scenario:
+            "A popup appears claiming your computer is infected and provides a phone number to call for help. Your response?",
+          choices: [
+            "Call the number immediately",
+            "Close the popup and run legitimate antivirus",
+            "Click 'OK' to remove the virus",
+            "Download their recommended software",
+          ],
+          correct: 1,
+          explanation:
+            "Legitimate security warnings come from your installed antivirus software, not random popups.",
+        },
+        {
+          scenario:
+            "You get a text message saying you've won a prize and need to click a link to claim it. What's your move?",
+          choices: [
+            "Click the link to see what you won",
+            "Delete the message",
+            "Reply 'STOP' to unsubscribe",
+            "Share the good news on social media",
+          ],
+          correct: 1,
+          explanation:
+            "Unsolicited prize notifications are almost always scams. Delete these messages without clicking anything.",
+        },
+      ];
 
-        // State management
-        let currentQuizQuestion = 0;
-        let quizScore = 0;
-        let currentSimulation = 0;
-        let simulationScore = 0;
-        let quizCompleted = false;
-        let simulationsCompleted = false;
+      // State management
+      let currentQuizQuestion = 0;
+      let quizScore = 0;
+      let currentSimulation = 0;
+      let simulationScore = 0;
+      let quizCompleted = false;
+      let simulationsCompleted = false;
 
-        // Reading module functionality
-        function toggleReading(section) {
-            const allSections = ['threats', 'defense', 'trends'];
-            allSections.forEach(s => {
-                const element = document.getElementById(`reading-${s}`);
-                if (s === section) {
-                    element.classList.toggle('expanded');
-                } else {
-                    element.classList.remove('expanded');
-                }
-            });
+      // Reading module functionality
+      function toggleReading(section) {
+        const allSections = ["threats", "defense", "trends"];
+        allSections.forEach((s) => {
+          const element = document.getElementById(`reading-${s}`);
+          if (s === section) {
+            element.classList.toggle("expanded");
+          } else {
+            element.classList.remove("expanded");
+          }
+        });
+      }
+
+      // Progress tracking
+      function updateProgress() {
+        const quizProgress = quizCompleted
+          ? 100
+          : (currentQuizQuestion / quizQuestions.length) * 100;
+        const simProgress = simulationsCompleted
+          ? 100
+          : (currentSimulation / simulations.length) * 100;
+
+        document.getElementById("quiz-progress-bar").style.width =
+          quizProgress + "%";
+        document.getElementById("quiz-progress-text").textContent =
+          Math.round(quizProgress) + "%";
+        document.getElementById("simulations-progress-bar").style.width =
+          simProgress + "%";
+        document.getElementById("simulations-progress-text").textContent =
+          Math.round(simProgress) + "%";
+      }
+
+      // Quiz functionality
+      function startQuiz() {
+        currentQuizQuestion = 0;
+        quizScore = 0;
+        showQuizQuestion();
+      }
+
+      function showQuizQuestion() {
+        if (currentQuizQuestion >= quizQuestions.length) {
+          endQuiz();
+          return;
         }
 
-        // Progress tracking
-        function updateProgress() {
-            const quizProgress = quizCompleted ? 100 : (currentQuizQuestion / quizQuestions.length) * 100;
-            const simProgress = simulationsCompleted ? 100 : (currentSimulation / simulations.length) * 100;
-            
-            document.getElementById('quiz-progress-bar').style.width = quizProgress + '%';
-            document.getElementById('quiz-progress-text').textContent = Math.round(quizProgress) + '%';
-            document.getElementById('simulations-progress-bar').style.width = simProgress + '%';
-            document.getElementById('simulations-progress-text').textContent = Math.round(simProgress) + '%';
-        }
+        const question = quizQuestions[currentQuizQuestion];
+        const quizContainer = document.getElementById("quiz-container");
 
-        // Quiz functionality
-        function startQuiz() {
-            currentQuizQuestion = 0;
-            quizScore = 0;
-            showQuizQuestion();
-        }
-
-        function showQuizQuestion() {
-            if (currentQuizQuestion >= quizQuestions.length) {
-                endQuiz();
-                return;
-            }
-
-            const question = quizQuestions[currentQuizQuestion];
-            const quizContainer = document.getElementById('quiz-container');
-            
-            quizContainer.innerHTML = `
+        quizContainer.innerHTML = `
                 <div class="text-center mb-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Question ${currentQuizQuestion + 1} of ${quizQuestions.length}</h3>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: ${((currentQuizQuestion) / quizQuestions.length) * 100}%"></div>
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">Question ${
+                      currentQuizQuestion + 1
+                    } of ${quizQuestions.length}</h3>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                        <div class="bg-gradient-to-r from-cyan-400 to-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${
+                          (currentQuizQuestion / quizQuestions.length) * 100
+                        }%"></div>
                     </div>
                 </div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-6">${question.question}</h4>
+                <h4 class="text-xl font-semibold text-gray-300 mb-6">${
+                  question.question
+                }</h4>
                 <div class="space-y-3">
-                    ${question.options.map((option, index) => `
-                        <button onclick="selectQuizAnswer(${index})" class="w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 font-medium">
+                    ${question.options
+                      .map(
+                        (option, index) => `
+                        <button onclick="selectQuizAnswer(${index})" class="w-full text-left p-4 rounded-xl border-2 transition-all duration-300 font-medium">
                             ${option}
                         </button>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 </div>
             `;
+      }
+
+      function selectQuizAnswer(selectedIndex) {
+        const question = quizQuestions[currentQuizQuestion];
+        const isCorrect = selectedIndex === question.correct;
+
+        if (isCorrect) {
+          quizScore++;
         }
 
-        function selectQuizAnswer(selectedIndex) {
-            const question = quizQuestions[currentQuizQuestion];
-            const isCorrect = selectedIndex === question.correct;
-            
-            if (isCorrect) {
-                quizScore++;
-            }
+        // Show feedback
+        const buttons = document.querySelectorAll("#quiz-container button");
+        buttons.forEach((button, index) => {
+          button.disabled = true;
+          if (index === question.correct) {
+            button.classList.add(
+              "bg-green-100",
+              "border-green-500",
+              "text-green-800"
+            );
+          } else if (index === selectedIndex && !isCorrect) {
+            button.classList.add(
+              "bg-red-100",
+              "border-red-500",
+              "text-red-800"
+            );
+          }
+        });
 
-            // Show feedback
-            const buttons = document.querySelectorAll('#quiz-container button');
-            buttons.forEach((button, index) => {
-                button.disabled = true;
-                if (index === question.correct) {
-                    button.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
-                } else if (index === selectedIndex && !isCorrect) {
-                    button.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
-                }
-            });
-
-            // Show explanation
-            setTimeout(() => {
-                const explanationDiv = document.createElement('div');
-                explanationDiv.className = 'mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg';
-                explanationDiv.innerHTML = `
-                    <p class="text-blue-800"><strong>Explanation:</strong> ${question.explanation}</p>
+        // Show explanation
+        setTimeout(() => {
+          const explanationDiv = document.createElement("div");
+          explanationDiv.className =
+            "mt-6 p-4 bg-cyan-900/30 border-l-4 border-cyan-400 rounded-r-lg";
+          explanationDiv.innerHTML = `
+                    <p class="text-cyan-300"><strong>Explanation:</strong> ${
+                      question.explanation
+                    }</p>
                     <button onclick="nextQuizQuestion()" class="mt-4 btn-primary">
-                        ${currentQuizQuestion + 1 >= quizQuestions.length ? 'Finish Quiz' : 'Next Question'}
+                        ${
+                          currentQuizQuestion + 1 >= quizQuestions.length
+                            ? "Finish Quiz"
+                            : "Next Question"
+                        }
                     </button>
                 `;
-                document.getElementById('quiz-container').appendChild(explanationDiv);
-            }, 1500);
-        }
+          document.getElementById("quiz-container").appendChild(explanationDiv);
+        }, 1500);
+      }
 
-        function nextQuizQuestion() {
-            currentQuizQuestion++;
-            updateProgress();
-            showQuizQuestion();
-        }
+      function nextQuizQuestion() {
+        currentQuizQuestion++;
+        updateProgress();
+        showQuizQuestion();
+      }
 
-        function endQuiz() {
-            quizCompleted = true;
-            updateProgress();
-            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
-            const scoreElement = document.getElementById('quiz-score');
-            
-            document.getElementById('quiz-container').innerHTML = `
+      function endQuiz() {
+        quizCompleted = true;
+        updateProgress();
+        const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+        const scoreElement = document.getElementById("quiz-score");
+
+        document.getElementById("quiz-container").innerHTML = `
                 <div class="text-center">
                     <div class="w-24 h-24 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span class="text-3xl">🎉</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Quiz Completed!</h3>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Quiz Completed!</h3>
                     <div class="text-6xl font-bold gradient-text mb-2">${percentage}%</div>
-                    <p class="text-gray-600 mb-6">You scored ${quizScore} out of ${quizQuestions.length} questions correctly!</p>
+                    <p class="text-gray-300 mb-6">You scored ${quizScore} out of ${quizQuestions.length} questions correctly!</p>
                     <button onclick="startQuiz()" class="btn-primary">Retake Quiz</button>
                 </div>
             `;
-            
-            scoreElement.textContent = `Final Score: ${quizScore}/${quizQuestions.length} (${percentage}%)`;
-            scoreElement.classList.remove('hidden');
+
+        scoreElement.textContent = `Final Score: ${quizScore}/${quizQuestions.length} (${percentage}%)`;
+        scoreElement.classList.remove("hidden");
+      }
+
+      // Simulation functionality
+      function startSimulations() {
+        currentSimulation = 0;
+        simulationScore = 0;
+        showSimulation();
+      }
+
+      function showSimulation() {
+        if (currentSimulation >= simulations.length) {
+          endSimulations();
+          return;
         }
 
-        // Simulation functionality
-        function startSimulations() {
-            currentSimulation = 0;
-            simulationScore = 0;
-            showSimulation();
-        }
+        const simulation = simulations[currentSimulation];
+        const simContainer = document.getElementById("simulation-container");
 
-        function showSimulation() {
-            if (currentSimulation >= simulations.length) {
-                endSimulations();
-                return;
-            }
-
-            const simulation = simulations[currentSimulation];
-            const simContainer = document.getElementById('simulation-container');
-            
-            simContainer.innerHTML = `
+        simContainer.innerHTML = `
                 <div class="text-center mb-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Scenario ${currentSimulation + 1} of ${simulations.length}</h3>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full transition-all duration-500" style="width: ${((currentSimulation) / simulations.length) * 100}%"></div>
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">Scenario ${
+                      currentSimulation + 1
+                    } of ${simulations.length}</h3>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                        <div class="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full transition-all duration-500" style="width: ${
+                          (currentSimulation / simulations.length) * 100
+                        }%"></div>
                     </div>
                 </div>
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">🎭 Scenario:</h4>
-                    <p class="text-gray-700">${simulation.scenario}</p>
+                <div class="bg-yellow-900/30 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-6">
+                    <h4 class="text-lg font-semibold text-yellow-300 mb-4">🎭 Scenario:</h4>
+                    <p class="text-gray-300">${simulation.scenario}</p>
                 </div>
                 <div class="space-y-3">
-                    ${simulation.choices.map((choice, index) => `
-                        <button onclick="selectSimulationChoice(${index})" class="w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all duration-300 font-medium">
+                    ${simulation.choices
+                      .map(
+                        (choice, index) => `
+                        <button onclick="selectSimulationChoice(${index})" class="w-full text-left p-4 rounded-xl border-2 transition-all duration-300 font-medium">
                             ${choice}
                         </button>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 </div>
             `;
+      }
+
+      function selectSimulationChoice(selectedIndex) {
+        const simulation = simulations[currentSimulation];
+        const isCorrect = selectedIndex === simulation.correct;
+
+        if (isCorrect) {
+          simulationScore++;
         }
 
-        function selectSimulationChoice(selectedIndex) {
-            const simulation = simulations[currentSimulation];
-            const isCorrect = selectedIndex === simulation.correct;
-            
-            if (isCorrect) {
-                simulationScore++;
-            }
+        // Show feedback
+        const buttons = document.querySelectorAll(
+          "#simulation-container button"
+        );
+        buttons.forEach((button, index) => {
+          button.disabled = true;
+          if (index === simulation.correct) {
+            button.classList.add(
+              "bg-green-100",
+              "border-green-500",
+              "text-green-800"
+            );
+          } else if (index === selectedIndex && !isCorrect) {
+            button.classList.add(
+              "bg-red-100",
+              "border-red-500",
+              "text-red-800"
+            );
+          }
+        });
 
-            // Show feedback
-            const buttons = document.querySelectorAll('#simulation-container button');
-            buttons.forEach((button, index) => {
-                button.disabled = true;
-                if (index === simulation.correct) {
-                    button.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
-                } else if (index === selectedIndex && !isCorrect) {
-                    button.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
-                }
-            });
-
-            // Show explanation
-            setTimeout(() => {
-                const explanationDiv = document.createElement('div');
-                explanationDiv.className = 'mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg';
-                explanationDiv.innerHTML = `
-                    <p class="text-blue-800"><strong>Why:</strong> ${simulation.explanation}</p>
+        // Show explanation
+        setTimeout(() => {
+          const explanationDiv = document.createElement("div");
+          explanationDiv.className =
+            "mt-6 p-4 bg-cyan-900/30 border-l-4 border-cyan-400 rounded-r-lg";
+          explanationDiv.innerHTML = `
+                    <p class="text-cyan-300"><strong>Why:</strong> ${
+                      simulation.explanation
+                    }</p>
                     <button onclick="nextSimulation()" class="mt-4 btn-primary">
-                        ${currentSimulation + 1 >= simulations.length ? 'Complete Simulations' : 'Next Scenario'}
+                        ${
+                          currentSimulation + 1 >= simulations.length
+                            ? "Complete Simulations"
+                            : "Next Scenario"
+                        }
                     </button>
                 `;
-                document.getElementById('simulation-container').appendChild(explanationDiv);
-            }, 1500);
-        }
+          document
+            .getElementById("simulation-container")
+            .appendChild(explanationDiv);
+        }, 1500);
+      }
 
-        function nextSimulation() {
-            currentSimulation++;
-            updateProgress();
-            showSimulation();
-        }
+      function nextSimulation() {
+        currentSimulation++;
+        updateProgress();
+        showSimulation();
+      }
 
-        function endSimulations() {
-            simulationsCompleted = true;
-            updateProgress();
-            const percentage = Math.round((simulationScore / simulations.length) * 100);
-            
-            document.getElementById('simulation-container').innerHTML = `
+      function endSimulations() {
+        simulationsCompleted = true;
+        updateProgress();
+        const percentage = Math.round(
+          (simulationScore / simulations.length) * 100
+        );
+
+        document.getElementById("simulation-container").innerHTML = `
                 <div class="text-center">
                     <div class="w-24 h-24 bg-gradient-to-r from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span class="text-3xl">🏆</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Simulations Complete!</h3>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Simulations Complete!</h3>
                     <div class="text-6xl font-bold gradient-text mb-2">${percentage}%</div>
-                    <p class="text-gray-600 mb-6">You handled ${simulationScore} out of ${simulations.length} scenarios correctly!</p>
+                    <p class="text-gray-300 mb-6">You handled ${simulationScore} out of ${simulations.length} scenarios correctly!</p>
                     <button onclick="startSimulations()" class="btn-primary">Try Again</button>
                 </div>
             `;
-        }
+      }
 
-        // Modal functionality
-        function showModal(title, message) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-message').textContent = message;
-            document.getElementById('alert-modal').style.display = 'flex';
-        }
+      // Modal functionality
+      function showModal(title, message) {
+        document.getElementById("modal-title").textContent = title;
+        document.getElementById("modal-message").textContent = message;
+        document.getElementById("alert-modal").style.display = "flex";
+      }
 
-        function closeModal() {
-            document.getElementById('alert-modal').style.display = 'none';
-        }
+      function closeModal() {
+        document.getElementById("alert-modal").style.display = "none";
+      }
 
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
-            document.getElementById('start-sim-btn').addEventListener('click', startSimulations);
-            document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-            
-            // Close modal when clicking outside
-            document.getElementById('alert-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            updateProgress();
-        });
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("start-quiz-btn")
+          .addEventListener("click", startQuiz);
+        document
+          .getElementById("start-sim-btn")
+          .addEventListener("click", startSimulations);
+        document
+          .getElementById("modal-close-btn")
+          .addEventListener("click", closeModal);
 
-        // Smooth scroll for better UX
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add some interactive feedback for checklist items
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.checklist-card')) {
-                const card = e.target.closest('.checklist-card');
-                card.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    card.style.transform = 'translateY(-3px)';
-                }, 150);
+        // Close modal when clicking outside
+        document
+          .getElementById("alert-modal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) {
+              closeModal();
             }
-        });
+          });
 
-        // Keyboard navigation support
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
+        updateProgress();
+      });
+
+      // Smooth scroll for better UX
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
         });
-   </script>
-</body>
+      });
+
+      // Add some interactive feedback for checklist items
+      document.addEventListener("click", function (e) {
+        if (e.target.closest(".checklist-card")) {
+          const card = e.target.closest(".checklist-card");
+          card.style.transform = "scale(0.98)";
+          setTimeout(() => {
+            card.style.transform = "translateY(-3px)";
+          }, 150);
+        }
+      });
+
+      // Keyboard navigation support
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
 </html>

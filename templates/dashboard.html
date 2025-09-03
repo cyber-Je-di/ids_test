@@ -16,7 +16,18 @@
         <div class="nav-links">
             <a href="{{ url_for('home') }}" class="nav-link">Home</a>
             <a href="{{ url_for('dashboard') }}" class="nav-link active">Dashboard</a>
-            <span class="user-info">👤 Admin User</span>
+           
+              {% if session.get('user_email') %}
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+  {% endif %}
+
+{% if session.get('user_role') %}
+<span class="user-info">👤 {{ session['user_role'].capitalize() }}</span>
+{% endif %}
+
+
         </div>
     </nav>
 

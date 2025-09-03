@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - CyberGuardian</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+  <!-- Floating Shapes -->
+  <div class="bg-shapes">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Floating background text -->
+  <div class="floating-text">CyberGuardian</div>
+
+  <!-- Login Card -->
+  <div class="login-container">
+    <div class="login-card">
+      <h2 class="login-title">Welcome to CyberGuardian</h2>
+      {% if error %}
+        <p class="error-msg">{{ error }}</p>
+      {% endif %}
+      <form method="POST" class="login-form">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <div class="show-password">
+          <input type="checkbox" id="togglePassword">
+          <label for="togglePassword">Show Password</label>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <p class="login-footer">© 2025 CyberGuardian</p>
+    </div>
+  </div>
+
+  <script>
+    // Show/hide password
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('change', function () {
+      password.type = this.checked ? 'text' : 'password';
+    });
+  </script>
+
+</body>
+</html>

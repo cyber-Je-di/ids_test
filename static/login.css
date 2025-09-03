@@ -1,0 +1,258 @@
+/* ==========================
+   BASE STYLES
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ==========================
+   BACKGROUND
+   ========================== */
+body {
+    background: linear-gradient(135deg, #0A1F44 0%, #102B5C 100%);
+    position: relative;
+    color: #EAEAEA;
+    animation: gradientBG 30s ease-in-out infinite;
+}
+
+/* Floating shapes container */
+.bg-shapes {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Individual floating shapes */
+.bg-shapes span {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    animation: floatShapes linear infinite;
+}
+
+/* Sizes/colors/durations for variety */
+.bg-shapes span:nth-child(1) { width: 20px; height: 20px; background-color: rgba(0, 216, 255, 0.3); animation-duration: 15s; }
+.bg-shapes span:nth-child(2) { width: 35px; height: 35px; background-color: rgba(255,45,149,0.25); animation-duration: 18s; }
+.bg-shapes span:nth-child(3) { width: 50px; height: 50px; background-color: rgba(58,95,255,0.2); animation-duration: 20s; }
+.bg-shapes span:nth-child(4) { width: 25px; height: 25px; background-color: rgba(0,216,255,0.2); animation-duration: 22s; }
+.bg-shapes span:nth-child(5) { width: 40px; height: 40px; background-color: rgba(255,45,149,0.15); animation-duration: 17s; }
+
+/* Glow and pulsate effect */
+.bg-shapes span::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0,216,255,0.8), 0 0 30px rgba(0,216,255,0.5);
+    animation: glowPulse 3s ease-in-out infinite alternate;
+}
+
+/* ==========================
+   LOGIN CONTAINER
+   ========================== */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================
+   LOGIN CARD
+   ========================== */
+.login-card {
+    background-color: rgba(8, 23, 49, 0.95);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,216,255,0.3);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    animation: fadeInScale 1s ease-out forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0,216,255,0.5), 0 0 50px rgba(0,216,255,0.2) inset;
+}
+
+/* ==========================
+   TITLES & MESSAGES
+   ========================== */
+.login-title {
+    font-size: 2rem;
+    color: #00D8FF;
+    margin-bottom: 2rem;
+    animation: slideIn 1s ease-out forwards;
+}
+
+.error-msg {
+    color: #FF2D95;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* ==========================
+   FORM INPUTS
+   ========================== */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.login-form label {
+    text-align: left;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.login-form input {
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #00D8FF;
+    background-color: rgba(255,255,255,0.05);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.login-form input:focus {
+    border-color: #FF2D95;
+    box-shadow: 0 0 10px rgba(255,45,149,0.5);
+    outline: none;
+}
+
+/* ==========================
+   LOGIN BUTTON
+   ========================== */
+.login-btn {
+    padding: 0.9rem 1rem;
+    border: none;
+    border-radius: 12px;
+    background-color: #FF2D95;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(255,45,149,0.4);
+    animation: neonPulse 2s ease-in-out infinite alternate;
+}
+
+.login-btn:hover {
+    background-color: #e0227f;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255,45,149,0.6), 0 0 20px rgba(255,45,149,0.5);
+}
+
+/*===========================
+   SHOW PASSWORD
+=============================*/
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.show-password input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ==========================
+   FOOTER
+   ========================== */
+.login-footer {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+/* ==========================
+   FLOATING TEXT
+   ========================== */
+.floating-text {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(0,216,255,0.1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    animation: floatText 20s linear infinite;
+    pointer-events: none;
+}
+
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideIn {
+    0% { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes floatShapes {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+    25% { opacity: 0.5; }
+    50% { transform: translateY(50vh) translateX(50px) rotate(180deg); opacity: 0.7; }
+    75% { opacity: 0.5; }
+    100% { transform: translateY(-50vh) translateX(-50px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes glowPulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+@keyframes neonPulse {
+    0% { box-shadow: 0 6px 20px rgba(255,45,149,0.4); }
+    50% { box-shadow: 0 6px 25px rgba(255,45,149,0.7), 0 0 20px rgba(255,45,149,0.5); }
+    100% { box-shadow: 0 6px 20px rgba(255,45,149,0.4); }
+}
+
+@keyframes floatText {
+    0% { transform: translate(-50%, -50%) rotate(-15deg) translateX(0); }
+    50% { transform: translate(-50%, -50%) rotate(-15deg) translateX(50px); }
+    100% { transform: translate(-50%, -50%) rotate(-15deg) translateX(0); }
+}
+
+@keyframes gradientBG {
+    0% { background: linear-gradient(135deg, #0A1F44 0%, #102B5C 100%); }
+    25% { background: linear-gradient(135deg, #081731 0%, #0A1F44 100%); }
+    50% { background: linear-gradient(135deg, #102B5C 0%, #3A5FFF 100%); }
+    75% { background: linear-gradient(135deg, #081731 0%, #0A1F44 100%); }
+    100% { background: linear-gradient(135deg, #0A1F44 0%, #102B5C 100%); }
+}

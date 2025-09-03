@@ -15,6 +15,7 @@ import logging
 
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey123!"  # <-- add this line
 
 try:
     pipeline = joblib.load("models/xgboost_ids_pipeline.joblib")
@@ -63,6 +64,32 @@ email_stats = {
     "phishing": 0,
     "safe": 0
 }
+
+#---------- Login feature added---------#
+from flask import session, redirect, url_for, flash
+
+# Simple in-memory user store (for prototype)
+USERS = {
+    "admin@example.com": {"password": "adminpass", "role": "admin"},
+    "analyst@example.com": {"password": "analystpass", "role": "analyst"},
+    "user@example.com": {"password": "userpass", "role": "user"},
+}
+
+#------Protect Routes-----#
+from functools import wraps
+from flask import session, abort
+
+def login_required(role=None):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if "user_email" not in session:
+                return redirect(url_for("login"))
+            if role and session.get("user_role") not in role:
+                return abort(403)  # Forbidden
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 # --- BEMBA-SPECIFIC SCAM DETECTION ---
 BEMBA_SCAM_PATTERNS = [
@@ -251,7 +278,7 @@ def preprocess_message(message):
 
 def get_ensemble_prediction(processed_message, weights=None):
     if weights is None:
-        weights = {'lstm': 0.4, 'dense': 0.3}
+        weights = {'lstm': 0.3, 'dense': 0.8}
     
     predictions = {}
     total_weight = sum(weights.values())
@@ -399,6 +426,7 @@ def home():
     return render_template('index.html')
 
 @app.route("/ids_dashboard")
+@login_required(role=["admin", "analyst"])
 def ids_dashboard():
     return render_template("ids_dashboard.html")
 
@@ -450,10 +478,12 @@ def get_alerts():
 #CYBER SYSTEM ROUTES APP.PY
 #-------------------------------
 @app.route('/dashboard')
+@login_required(role=["admin", "analyst"])
 def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/awareness')
+@login_required(role=["admin", "analyst", "user"])
 def awareness_page():
     return render_template('awareness.html')
 
@@ -462,6 +492,7 @@ def get_model_file(filename):
     return send_from_directory('models', filename)
 
 @app.route('/sms_detector', methods=['GET', 'POST'])
+@login_required(role=["admin", "analyst", "user"])
 def sms_detector():
     prediction_result = None
     individual_preds = None
@@ -532,6 +563,7 @@ def sms_detector():
 # Flask Route
 # -------------------------------
 @app.route('/phishing_detector', methods=['GET', 'POST'])
+@login_required(role=["admin", "analyst", "user"])
 def phishing_detector():
     prediction_result = None
     input_data = ""
@@ -589,9 +621,11 @@ def phishing_detector():
 
 
     
-@app.route('/threat_dashboard')
+# Admin + analyst
+@app.route("/threat_dashboard")
+@login_required(role=["admin", "analyst"])
 def threat_dashboard():
-    return render_template('threat_dashboard.html')
+    return render_template("threat_dashboard.html")
 
 @app.route('/api/sms_stats')
 def get_sms_stats():
@@ -641,6 +675,35 @@ def intrusion_view():
 @app.route("/threats/comm")
 def comm_view():
     return render_template("threat_comm.html")
+
+from flask import session, redirect, url_for, request, render_template
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        # Fetch user from USERS dict
+        user = USERS.get(email)
+
+        if user and password == user['password']:  # simple check for prototype
+            session['user_email'] = email
+            session['user_role'] = user['role']  # e.g., 'admin', 'analyst', 'user'
+            return redirect(url_for('home'))
+        else:
+            error = "Invalid credentials"
+            return render_template('login.html', error=error)
+
+    return render_template('login.html')
+
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 
 if __name__ == "__main__":
     print("🚀 Starting Enhanced Scam Detection System")
