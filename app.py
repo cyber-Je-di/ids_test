@@ -324,6 +324,18 @@ def get_phishing_prediction(input_data):
         ml_label = "PHISHING" if prob[1] > 0.5 else "SAFE"
         ml_confidence = float(prob[1] if ml_label == "PHISHING" else prob[0])
 
+        explanation_text = ""
+        if ml_label == "PHISHING":
+            if ml_confidence > 0.8:
+                explanation_text = "This content shows strong indicators of a phishing attempt, such as suspicious links, urgent language, or unusual sender information. Avoid clicking any links or providing personal information."
+            else:
+                explanation_text = "This content contains elements commonly found in phishing attacks. Please proceed with extreme caution."
+        else: # SAFE
+            if ml_confidence > 0.8:
+                explanation_text = "Our model did not find any common signs of phishing in this content. It appears to be safe."
+            else:
+                explanation_text = "This content seems safe, but always be cautious with unexpected links or requests for information."
+
         result = {
             "final_pred": ml_confidence,
             "is_phishing": ml_label == "PHISHING",
@@ -332,7 +344,8 @@ def get_phishing_prediction(input_data):
             "confidence": round(abs(ml_confidence - 0.5) * 2, 3),
             "rule_suspicious": False,
             "rule_reasons": [],
-            "result_text": ml_label  # for frontend display
+            "result_text": ml_label,
+            "explanation": explanation_text
         }
 
         return result, None
@@ -533,12 +546,26 @@ def sms_detector():
                     final_pred, individual_preds = get_ensemble_prediction(processed_message)
                     
                     is_spam = final_pred > 0.5
+                    confidence = abs(final_pred - 0.5) * 2
+
+                    explanation_text = ""
+                    if is_spam:
+                        if confidence > 0.8:
+                            explanation_text = "This message shows strong characteristics of a scam, based on our AI model's analysis of its content and structure."
+                        else:
+                            explanation_text = "This message contains patterns often seen in scam messages. Please be cautious with any links or requests."
+                    else:
+                        if confidence > 0.8:
+                            explanation_text = "This message appears to be safe. Our AI model found no common signs of a scam."
+                        else:
+                            explanation_text = "This message seems safe, but always remember to be careful with unexpected messages."
+
                     prediction_result = {
                         'final_pred': float(final_pred),
                         'is_spam': is_spam,
-                        'confidence': abs(final_pred - 0.5) * 2,
+                        'confidence': confidence,
                         'language': Language.ENGLISH.value,
-                        'explanation': 'ML model analysis',
+                        'explanation': explanation_text,
                         'method': 'ml_model'
                     }
 
