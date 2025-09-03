@@ -27,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('emailsScanned').textContent = data.email.total;
                 document.getElementById('spamBlocked').textContent = data.email.phishing;
 
-                // ✅ Update "Last Update" timestamp
-                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
-
                 // ✅ Update Threat Preview Chart
                 const ctx = document.getElementById('miniThreatChart').getContext('2d');
                 if (window.threatChart) {
@@ -65,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
     script.onload = () => {
         updateDashboard();
-        setInterval(updateDashboard, 5000); // refresh every 5s
+        setInterval(updateDashboard, 1500); // refresh every 1.5s
     };
     document.head.appendChild(script);
 });

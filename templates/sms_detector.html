@@ -5,8 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scam SMS Detector - CyberGuard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='sms.css') }}" />
+    <style>
+      /* Additional styles for confidence display */
+      .confidence-container {
+        margin: 15px 0;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+      }
+      
+      .confidence-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 8px 0;
+      }
+      
+      .confidence-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .confidence-high { background-color: #28a745; }
+      .confidence-medium { background-color: #ffc107; color: #000; }
+      .confidence-low { background-color: #dc3545; }
+      
+      .confidence-text {
+        font-size: 14px;
+        margin: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .confidence-percentage {
+        font-weight: bold;
+        font-size: 16px;
+      }
+      
+      .confidence-label {
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        color: white;
+      }
+      
+      .label-high { background-color: #28a745; }
+      .label-medium { background-color: #ffc107; color: #000; }
+      .label-low { background-color: #dc3545; }
+
+      /* Styles for Explanation Box */
+      .explanation-box {
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .explanation-scam {
+        background-color: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.4);
+        color: #e74c3c;
+      }
+      .explanation-safe {
+        background-color: rgba(40, 167, 69, 0.1);
+        border: 1px solid rgba(40, 167, 69, 0.4);
+        color: #2ecc71;
+      }
+
+      /* Styles for Detected Patterns */
+      .patterns-container {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+      }
+      .patterns-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .pattern-tag {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 13px;
+        font-family: monospace;
+        font-weight: bold;
+      }
+
+      /* Styles for Loading Overlay */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1001;
+        color: white;
+        font-size: 1.2rem;
+      }
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 4px solid #00d8ff;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Analyzing Message...</p>
+    </div>
     <nav class="navbar dashboard-nav">
       <div class="nav-brand">
         <h2>📱 Scam SMS Detector</h2>
@@ -14,7 +148,6 @@
       <div class="nav-links">
         {% set role = session.get('user_role') %}
         <a href="{{ url_for('home') }}" class="nav-link">Home</a>
-
         {% if role in ['admin', 'analyst'] %}
         <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
         {% endif %}
@@ -32,12 +165,10 @@
         {% endif %}
       </div>
     </nav>
-
     <div class="dashboard-container">
       <div class="card-content">
         <h1 class="text-center">Advanced Scam Detector</h1>
         <p class="text-center">Analyze your SMS messages for scams or spam.</p>
-
         <form method="POST" class="form-container">
           <label for="message">Enter a message:</label>
           <textarea
@@ -51,7 +182,6 @@
           >
           <button type="submit" class="detect-btn">Scan Message</button>
         </form>
-
         {% if result %}
         <div class="result-box" id="result-box"></div>
         {% endif %} {% if error %}
@@ -61,25 +191,136 @@
         {% endif %}
       </div>
     </div>
-
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+          const form = document.querySelector('.form-container');
+          const overlay = document.getElementById('loading-overlay');
+          if(form && overlay) {
+            form.addEventListener('submit', () => {
+                overlay.style.display = 'flex';
+            });
+          }
+
           const result = {{ result | tojson | safe }};
           const resultBox = document.getElementById('result-box');
-
+          
           if (result) {
               let html = `<h3>Prediction Result:</h3>`;
+              
+              // Main prediction result
               if (result.is_spam) {
                   html += `<p class="error-text">🚨 <strong>SCAM DETECTED!</strong></p>`;
               } else {
                   html += `<p class="success-text">✅ <strong>SAFE MESSAGE (HAM)</strong></p>`;
               }
 
-              // Optional: show simple label from result
+              // Explanation Box
+              if (result.explanation) {
+                  const alertClass = result.is_spam ? 'explanation-scam' : 'explanation-safe';
+                  html += `
+                      <div class="explanation-box ${alertClass}">
+                          <strong>Explanation:</strong> ${result.explanation}
+                      </div>
+                  `;
+              }
+              
+              // Classification text
               if (result.result_text) {
                   html += `<p>Classification: <strong>${result.result_text}</strong></p>`;
               }
+              
+              // Confidence Level Display
+              if (result.confidence !== undefined) {
+                  const confidence = parseFloat(result.confidence);
+                  const confidencePercentage = (confidence * 100).toFixed(1);
+                  
+                  // Determine confidence level and styling
+                  let confidenceLevel, confidenceClass, labelClass;
+                  if (confidence >= 0.8) {
+                      confidenceLevel = "High";
+                      confidenceClass = "confidence-high";
+                      labelClass = "label-high";
+                  } else if (confidence >= 0.6) {
+                      confidenceLevel = "Medium";
+                      confidenceClass = "confidence-medium";
+                      labelClass = "label-medium";
+                  } else {
+                      confidenceLevel = "Low";
+                      confidenceClass = "confidence-low";
+                      labelClass = "label-low";
+                  }
+                  
+                  html += `
+                      <div class="confidence-container">
+                          <div class="confidence-text">
+                              <span>Confidence Level:</span>
+                              <span class="confidence-label ${labelClass}">${confidenceLevel}</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill ${confidenceClass}" style="width: ${confidencePercentage}%">
+                                  <span class="confidence-percentage">${confidencePercentage}%</span>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+              }
+              
+              // Probability scores (if available)
+              if (result.spam_probability !== undefined || result.ham_probability !== undefined) {
+                  html += `<div class="confidence-container">`;
+                  html += `<h4>Detailed Probabilities:</h4>`;
+                  
+                  if (result.spam_probability !== undefined) {
+                      const spamProb = (parseFloat(result.spam_probability) * 100).toFixed(1);
+                      html += `
+                          <div class="confidence-text">
+                              <span>🚨 Spam/Scam Probability:</span>
+                              <span class="confidence-percentage">${spamProb}%</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill confidence-low" style="width: ${spamProb}%"></div>
+                          </div>
+                      `;
+                  }
+                  
+                  if (result.ham_probability !== undefined) {
+                      const hamProb = (parseFloat(result.ham_probability) * 100).toFixed(1);
+                      html += `
+                          <div class="confidence-text">
+                              <span>✅ Safe Message Probability:</span>
+                              <span class="confidence-percentage">${hamProb}%</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill confidence-high" style="width: ${hamProb}%"></div>
+                          </div>
+                      `;
+                  }
+                  
+                  html += `</div>`;
+              }
+              
+              // Additional model information (if available)
+              if (result.model_name) {
+                  html += `<p><small>Model: ${result.model_name}</small></p>`;
+              }
+              
+              if (result.processing_time) {
+                  html += `<p><small>Processing Time: ${result.processing_time}ms</small></p>`;
+              }
 
+              // Display detected patterns if they exist
+              if (result.detected_patterns && result.detected_patterns.length > 0) {
+                  html += `
+                      <div class="patterns-container">
+                          <strong>Suspicious Phrases Found:</strong>
+                          <div class="patterns-tags">
+                  `;
+                  result.detected_patterns.forEach(pattern => {
+                      html += `<span class="pattern-tag">${pattern}</span>`;
+                  });
+                  html += `</div></div>`;
+              }
+              
               resultBox.innerHTML = html;
           }
       });

@@ -194,11 +194,13 @@ def detect_bemba_scam_patterns(message):
     
     # Check all Bemba scam patterns
     for pattern, score, reason in BEMBA_SCAM_PATTERNS:
-        if re.search(pattern, text, re.IGNORECASE):
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
             scam_score += score
             if reason not in reasons:
                 reasons.append(reason)
-            detected_patterns.append(pattern)
+            # Use match.group(0) to get the actual matched string and add it
+            detected_patterns.append(match.group(0))
     
     # Additional scoring for multiple patterns
     pattern_count = len(detected_patterns)
@@ -228,13 +230,15 @@ def detect_bemba_scam_patterns(message):
     if is_bemba:
         explanation += " | Language: Bemba"
     
+    # Return unique matches
     return {
         "risk_level": risk_level,
         "confidence": round(confidence, 2),
         "explanation": explanation,
         "language": Language.BEMBA.value if is_bemba else Language.UNKNOWN.value,
         "is_bemba": is_bemba,
-        "pattern_count": pattern_count
+        "pattern_count": pattern_count,
+        "detected_patterns": list(set(detected_patterns))
     }
 
 # Load models at startup
@@ -324,6 +328,18 @@ def get_phishing_prediction(input_data):
         ml_label = "PHISHING" if prob[1] > 0.5 else "SAFE"
         ml_confidence = float(prob[1] if ml_label == "PHISHING" else prob[0])
 
+        explanation_text = ""
+        if ml_label == "PHISHING":
+            if ml_confidence > 0.8:
+                explanation_text = "This content shows strong indicators of a phishing attempt, such as suspicious links, urgent language, or unusual sender information. Avoid clicking any links or providing personal information."
+            else:
+                explanation_text = "This content contains elements commonly found in phishing attacks. Please proceed with extreme caution."
+        else: # SAFE
+            if ml_confidence > 0.8:
+                explanation_text = "Our model did not find any common signs of phishing in this content. It appears to be safe."
+            else:
+                explanation_text = "This content seems safe, but always be cautious with unexpected links or requests for information."
+
         result = {
             "final_pred": ml_confidence,
             "is_phishing": ml_label == "PHISHING",
@@ -332,7 +348,8 @@ def get_phishing_prediction(input_data):
             "confidence": round(abs(ml_confidence - 0.5) * 2, 3),
             "rule_suspicious": False,
             "rule_reasons": [],
-            "result_text": ml_label  # for frontend display
+            "result_text": ml_label,
+            "explanation": explanation_text
         }
 
         return result, None
@@ -340,7 +357,6 @@ def get_phishing_prediction(input_data):
         return None, f"Error during prediction: {e}"
 
 #-----------------------------
-#imap integration    
 import imaplib
 import email
 from email.header import decode_header
@@ -355,16 +371,21 @@ def fetch_gmail_emails(user_email, app_password, max_emails=10):
         mail.login(user_email, app_password)
         mail.select("inbox")
 
-        status, messages = mail.search(None, "ALL")
+        # Get the total number of messages in the inbox
+        status, message_count_data = mail.status("inbox", "(MESSAGES)")
         if status != "OK":
-            return [], "Failed to fetch emails"
+            return [], "Failed to get message count"
+        
+        message_count = int(message_count_data[0].decode().split()[2].strip(")"))
 
-        mail_ids = messages[0].split()
-        latest_ids = mail_ids[-max_emails:]
+        # Calculate the range for the latest emails
+        start_id = max(1, message_count - max_emails + 1)
+        end_id = message_count
+
         emails_data = []
 
-        for mail_id in reversed(latest_ids):
-            status, msg_data = mail.fetch(mail_id, "(RFC822)")
+        for mail_id in reversed(range(start_id, end_id + 1)):
+            status, msg_data = mail.fetch(str(mail_id), "(RFC822)")
             if status != "OK":
                 continue
 
@@ -447,21 +468,21 @@ def predict():
         prediction = model.predict(scaled_features)
         ml_prediction_text = "Attack" if prediction[0] == 0 else "Normal"
 
-        # Only add the alert to the dashboard if the model confirms it's an attack.
-        if ml_prediction_text == "Attack":
-            with lock:
-                alert_id_counter += 1
-                alert_info = {
-                    "id": alert_id_counter,
-                    "timestamp": datetime.now().isoformat(),
-                    "source_ip": data.get("source_ip", "N/A"),
-                    "dest_ip": data.get("destination_ip", "N/A"),
-                    "attack_type": data.get("snort_alert_description", "Unknown Event"),
-                    "ml_prediction": ml_prediction_text,
-                }
-                confirmed_attacks.insert(0, alert_info)
-                if len(confirmed_attacks) > 100:
-                    confirmed_attacks.pop()
+        # For demonstration purposes, we will add all alerts processed by the log_processor
+        # to the dashboard, regardless of the ML prediction. The prediction is stored for context.
+        with lock:
+            alert_id_counter += 1
+            alert_info = {
+                "id": alert_id_counter,
+                "timestamp": datetime.now().isoformat(),
+                "source_ip": data.get("source_ip", "N/A"),
+                "dest_ip": data.get("destination_ip", "N/A"),
+                "attack_type": data.get("snort_alert_description", "Unknown Event"),
+                "ml_prediction": ml_prediction_text,
+            }
+            confirmed_attacks.insert(0, alert_info)
+            if len(confirmed_attacks) > 100:
+                confirmed_attacks.pop()
 
         return jsonify({"status": "processed", "prediction": ml_prediction_text})
 
@@ -529,12 +550,26 @@ def sms_detector():
                     final_pred, individual_preds = get_ensemble_prediction(processed_message)
                     
                     is_spam = final_pred > 0.5
+                    confidence = abs(final_pred - 0.5) * 2
+
+                    explanation_text = ""
+                    if is_spam:
+                        if confidence > 0.8:
+                            explanation_text = "This message shows strong characteristics of a scam, based on our AI model's analysis of its content and structure."
+                        else:
+                            explanation_text = "This message contains patterns often seen in scam messages. Please be cautious with any links or requests."
+                    else:
+                        if confidence > 0.8:
+                            explanation_text = "This message appears to be safe. Our AI model found no common signs of a scam."
+                        else:
+                            explanation_text = "This message seems safe, but always remember to be careful with unexpected messages."
+
                     prediction_result = {
                         'final_pred': float(final_pred),
                         'is_spam': is_spam,
-                        'confidence': abs(final_pred - 0.5) * 2,
+                        'confidence': confidence,
                         'language': Language.ENGLISH.value,
-                        'explanation': 'ML model analysis',
+                        'explanation': explanation_text,
                         'method': 'ml_model'
                     }
 
@@ -703,6 +738,47 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+# --- Chat API Endpoint for Dashboard Chat Modal ---
+from dotenv import load_dotenv
+load_dotenv()
+import openai
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    data = request.get_json()
+    user_message = data.get('message', '')
+    # System prompt for cybersecurity context
+    system_prompt = (
+        "You are a cybersecurity assistant for a security dashboard. "
+        "Give users practical tips on security, social engineering, and protection. "
+        "Always provide actionable advice and explain why each tip matters. "
+        "If asked about the system, mention it monitors threats, phishing, and scams."
+    )
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_message}
+    ]
+    # Read token and endpoint from .env
+    token = os.getenv("GITHUB_TOKEN")
+    endpoint = "https://models.github.ai/inference"
+    model = "openai/gpt-4.1"
+    try:
+        client = openai.OpenAI(base_url=endpoint, api_key=token)
+        response = client.chat.completions.create(
+            messages=messages,
+            temperature=0.7,
+            top_p=1.0,
+            model=model
+        )
+        reply = response.choices[0].message.content
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"[OpenAI API Error] {e}\n{error_details}")
+        reply = f"Sorry, there was an error connecting to the assistant. Details: {str(e)}"
+    return jsonify({"reply": reply})
+
 
 # --- Chat API Endpoint for Dashboard Chat Modal ---
 from dotenv import load_dotenv

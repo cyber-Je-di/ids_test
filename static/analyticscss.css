@@ -80,15 +80,33 @@ body {
 }
 
 /* Attack Sources List */
-#attack-sources div {
-    background: rgba(0,216,255,0.1);
-    padding: 0.8rem 1rem;
-    border-radius: 10px;
+.attack-source-item {
     display: flex;
     justify-content: space-between;
-    font-weight: 500;
-    color: #EAEAEA;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: #0A1F44;
+    border: 1px solid rgba(0, 216, 255, 0.15);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
     animation: fadeInUp 0.6s forwards;
+    opacity: 0; /* Start hidden for animation */
+}
+
+.attack-source-item .font-mono {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgba(0, 216, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #00D8FF;
+}
+
+.attack-source-item .font-bold {
+    font-weight: bold;
+}
+
+.attack-source-item .text-red-400 {
+    color: #FF6B6B;
 }
 
 /* ==========================
