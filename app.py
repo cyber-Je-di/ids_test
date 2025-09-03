@@ -731,7 +731,6 @@ def login():
     return render_template('login.html')
 
 
-
 @app.route("/logout")
 def logout():
     session.clear()
@@ -776,7 +775,6 @@ def chat_api():
         print(f"[OpenAI API Error] {e}\n{error_details}")
         reply = f"Sorry, there was an error connecting to the assistant. Details: {str(e)}"
     return jsonify({"reply": reply})
-
 
 if __name__ == "__main__":
     print("🚀 Starting Enhanced Scam Detection System")
