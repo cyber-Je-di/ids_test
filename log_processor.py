@@ -104,7 +104,10 @@ def process_snort_alert(row, config, rule_priorities):
         )
 
         # Generate feature vector from the log entry
+        print(f"[DEBUG] Generating features for log: {row}")
         feature_vector = generate_features_from_log(row, protocol)
+        print(f"[DEBUG] Generated feature vector: {feature_vector}")
+
 
         payload = {
             "source_ip": src_ip,
@@ -113,11 +116,14 @@ def process_snort_alert(row, config, rule_priorities):
             "snort_alert_description": signature,
             "features": feature_vector,
         }
+        print(f"[DEBUG] Sending payload to API: {payload}")
 
         try:
-            requests.post(config.get("API", "flask_url"), json=payload, timeout=3)
+            response = requests.post(config.get("API", "flask_url"), json=payload, timeout=3)
+            print(f"[DEBUG] API Response Status: {response.status_code}")
+            print(f"[DEBUG] API Response Body: {response.text}")
         except requests.exceptions.RequestException as e:
-            print(f"Could not send alert to Flask API: {e}")
+            print(f"[DEBUG] API request failed: {e}")
     else:
         print(f"[-] Ignoring low-priority alert (Priority: {alert_priority or 'N/A'}).")
 
@@ -147,6 +153,8 @@ if __name__ == "__main__":
                     with open(snort_log_file, "r") as f:
                         f.seek(last_position)
                         new_lines = f.readlines()
+                        if new_lines:
+                            print(f"[DEBUG] Detected {len(new_lines)} new lines in log file.")
                         last_position = f.tell()
 
                     for line in new_lines:

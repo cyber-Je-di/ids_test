@@ -253,7 +253,7 @@
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
 
-        openChatBtn.onclick = () => { chatModal.style.display = 'block'; };
+        openChatBtn.onclick = () => { chatModal.style.display = 'flex'; };
         closeChatModal.onclick = () => { chatModal.style.display = 'none'; };
         window.onclick = (event) => { if (event.target == chatModal) chatModal.style.display = 'none'; };
 
