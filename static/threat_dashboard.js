@@ -7,6 +7,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`API Error: ${response.status}`);
             }
             const alerts = await response.json();
+
+            // Check which page is active and call the correct renderer
+            if (document.getElementById('threat-log')) {
+                renderThreatLogPage(alerts);
+            }
+            if (document.getElementById('network-events')) {
+                renderIntrusionPage(alerts);
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch or render threat data:", error);
+        }
+    }
+
+    // --- Renderer for threat_logs.html ---
+    function renderThreatLogPage(alerts) {
+        const logContainer = document.getElementById('threat-log');
+        if (!logContainer) return;
+
+        if (alerts.length === 0) {
+            logContainer.innerHTML = '<p class="text-center text-gray-400 p-4">No threat logs found.</p>';
+            return;
+        }
+
+        // Simple table structure
+        let tableHtml = `
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Attack Type</th>
+                        <th>Source IP</th>
+                        <th>Destination IP</th>
+                        <th>ML Prediction</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        alerts.forEach(alert => {
+            const isAttack = alert.ml_prediction === 'Attack';
+            tableHtml += `
+                <tr class="log-entry ${isAttack ? 'log-attack' : ''}">
+                    <td>${new Date(alert.timestamp).toLocaleString()}</td>
+                    <td>${alert.attack_type}</td>
+                    <td class="font-mono">${alert.source_ip}</td>
+                    <td class="font-mono">${alert.dest_ip}</td>
+                    <td class="${isAttack ? 'text-red-400' : 'text-green-400'}">${alert.ml_prediction}</td>
+                </tr>
             `;
         });
 
