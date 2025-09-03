@@ -48,7 +48,7 @@
         </div>
 
         <div class="dashboard-grid">
-            <div class="dashboard-card" onclick="navigateTo('ids_dashboard.html')">
+            <div class="dashboard-card" onclick="window.location.href='{{ url_for('ids_dashboard') }}'">
                 <div class="card-header">
                     <div class="card-icon">🔍</div>
                     <h3>Real-time Threat Detection</h3>
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-card" onclick="navigateTo('phishing-detection.html')">
+            <div class="dashboard-card" onclick="window.location.href='{{ url_for('phishing_detector') }}'">
                 <div class="card-header">
                     <div class="card-icon">📧</div>
                     <h3>Spam & Scam Email Detection</h3>
@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-card" onclick="navigateTo('sms-detection.html')">
+            <div class="dashboard-card" onclick="window.location.href='{{ url_for('sms_detector') }}'">
                 <div class="card-header">
                     <div class="card-icon">📱</div>
                     <h3>Scam SMS Detection</h3>
@@ -117,7 +117,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-card" onclick="navigateTo('awareness.html')">
+            <div class="dashboard-card" onclick="window.location.href='{{ url_for('awareness_page') }}'">
                 <div class="card-header">
                     <div class="card-icon">🎓</div>
                     <h3>Cybersecurity Awareness</h3>
@@ -140,7 +140,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-card large-card" onclick="navigateTo('threat-dashboard.html')">
+            <div class="dashboard-card large-card" onclick="window.location.href='{{ url_for('threat_dashboard') }}'">
                 <div class="card-header">
                     <div class="card-icon">📊</div>
                     <h3>Threat Analytics Dashboard</h3>
@@ -211,52 +211,36 @@
     <span>Last Update: <span id="lastUpdate"></span></span>
     </div>
 
-    <!-- Chat Modal -->
-    <div id="chatModal" class="chat-modal">
-        <div class="chat-modal-content">
-            <span class="close" id="closeChatModal">&times;</span>
-            <h2>Cybersecurity Chat Assistant</h2>
-            <div class="chat-context">
-                <p>
-                    Welcome to your Cybersecurity Assistant! This AI is aware of your system's security context and can provide tips on protection, social engineering, and best practices. Ask anything about:
-                    <ul>
-                        <li>General security tips</li>
-                        <li>How to avoid phishing and scams</li>
-                        <li>Social engineering threats</li>
-                        <li>Protecting your accounts and devices</li>
-                    </ul>
-                </p>
-            </div>
-            <div class="chat-messages" id="chatMessages"></div>
-            <form id="chatForm">
-                <input type="text" id="chatInput" placeholder="Type your question..." autocomplete="off" required />
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div>
-
-     <!-- =========================
-         CHAT MODAL (SINGLE COMPONENT)
+    <!-- =========================
+         CHAT MODAL
          ========================= -->
     <div id="chatModal" class="chat-modal">
         <div class="chat-modal-content">
-            <span class="close" id="closeChatModal">&times;</span>
-            <h3>🤖 CyberGuard Assistant</h3>
-            <img src="{{ url_for('static', filename='mascot.png') }}" alt="Cyber Mascot" class="mascot">
-            <div id="chatMessages" class="chat-messages"></div>
-            <form id="chatForm">
-                <input type="text" id="chatInput" placeholder="Type your message..." required />
-                <button type="submit">Send</button>
+            <div class="chat-header">
+                <h3><i class="fa-solid fa-robot"></i> CyberGuard Assistant</h3>
+                <span class="close" id="closeChatModal">&times;</span>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <!-- Initial welcome message -->
+                <div class="chat-assistant">
+                    <div class="chat-bubble">
+                        <img src="{{ url_for('static', filename='mascot.png') }}" alt="Mascot" class="chat-avatar">
+                        <p>Welcome! I'm your CyberGuard Assistant. Ask me about cybersecurity tips, how to spot phishing, or how to protect your accounts.</p>
+                    </div>
+                </div>
+            </div>
+            <form id="chatForm" class="chat-form">
+                <input type="text" id="chatInput" placeholder="Type your message..." required autocomplete="off" />
+                <button type="submit" aria-label="Send message">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </form>
         </div>
     </div>
 
     <!-- FLOATING BUTTON TO OPEN CHAT -->
-    <button id="openChatBtn"
-        style="position:fixed; bottom:30px; right:30px; padding:14px 18px; border:none;
-               border-radius:50%; background:#00D8FF; color:#081B3A; font-size:20px;
-               box-shadow:0 6px 20px rgba(0,0,0,0.5); cursor:pointer; z-index:9999;">
-        💬
+    <button id="openChatBtn" class="chat-open-btn" aria-label="Open chat">
+        <i class="fa-solid fa-comment-dots fa-xl"></i>
     </button>
 
     <!-- SCRIPT -->
@@ -294,10 +278,33 @@
         };
 
         function appendMessage(role, text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = role === 'user' ? 'chat-user' : 'chat-assistant';
-            msgDiv.textContent = (role === 'user' ? 'You: ' : 'Assistant: ') + text;
-            chatMessages.appendChild(msgDiv);
+            const msgContainer = document.createElement('div');
+            msgContainer.className = role === 'user' ? 'chat-user' : 'chat-assistant';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble';
+            bubble.textContent = text;
+
+            if (role === 'assistant') {
+                const avatar = document.createElement('img');
+                // Note: The url_for needs to be handled carefully in JS.
+                // A better approach would be to pass this from the template to JS.
+                // For now, we hardcode the path as the script is inline.
+                avatar.src = "{{ url_for('static', filename='mascot.png') }}";
+                avatar.alt = "Mascot";
+                avatar.className = 'chat-avatar';
+                msgContainer.appendChild(avatar);
+            }
+
+            msgContainer.appendChild(bubble);
+
+            // Clear the initial welcome message if it exists
+            const initialWelcome = document.querySelector('#chatMessages .chat-assistant');
+            if (initialWelcome && chatMessages.children.length === 1) {
+                chatMessages.innerHTML = '';
+            }
+
+            chatMessages.appendChild(msgContainer);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     </script>
