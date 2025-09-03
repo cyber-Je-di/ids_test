@@ -103,9 +103,9 @@
             threatData.uniqueIPs = Math.floor(Math.random() * 50) + 25;
 
             // Generate initial logs
-            for (let i = 0; i < 20; i++) {
-                addThreatLog();
-            }
+            // for (let i = 0; i < 20; i++) {
+            //     addThreatLog();
+            // }
 
             updateDashboard();
         }
@@ -297,9 +297,9 @@ document.addEventListener('DOMContentLoaded', updateSMSStats);
             
             setTimeout(() => {
                 // Add some new logs
-                for (let i = 0; i < 5; i++) {
-                    addThreatLog();
-                }
+                // for (let i = 0; i < 5; i++) {
+                //     addThreatLog();
+                // }
                 updateThreatLog();
                 refreshIcon.innerHTML = '🔄';
             }, 1000);
