@@ -251,7 +251,6 @@ body {
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     border: 1px solid rgba(0, 216, 255, 0.2);
     z-index: 10000;
-    display: flex;
     flex-direction: column;
     overflow: hidden;
     animation: slideUp 0.5s ease-out forwards;
