@@ -598,6 +598,26 @@
           font-size: 1.75rem;
         }
       }
+
+      /* Styles for Explanation Box */
+      .explanation-box {
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 15px;
+        line-height: 1.5;
+        text-align: left;
+      }
+      .explanation-phishing {
+        background-color: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.4);
+        color: #e74c3c;
+      }
+      .explanation-safe {
+        background-color: rgba(39, 174, 96, 0.1);
+        border: 1px solid rgba(39, 174, 96, 0.4);
+        color: #27ae60;
+      }
     </style>
   </head>
   <body>
@@ -721,6 +741,16 @@
               // Classification text
               const classification = result.result_text || result.ml_label || 'Unknown';
               html += `<p class="text-center">Classified as: <strong>${classification}</strong></p>`;
+
+              // Explanation Box
+              if (result.explanation) {
+                  const alertClass = result.is_phishing ? 'explanation-phishing' : 'explanation-safe';
+                  html += `
+                      <div class="explanation-box ${alertClass}">
+                          <strong>Why?</strong> ${result.explanation}
+                      </div>
+                  `;
+              }
               
               // Add confidence level display
               if (result.confidence !== undefined) {
@@ -830,6 +860,16 @@
                               ${statusBadge}
                           </div>
                   `;
+
+                  // Add explanation for each email
+                  if (email.result.explanation) {
+                      const alertClass = email.result.is_phishing ? 'explanation-phishing' : 'explanation-safe';
+                      emailsHtml += `
+                          <div class="explanation-box ${alertClass}" style="margin-top: 1rem;">
+                              <strong>Why?</strong> ${email.result.explanation}
+                          </div>
+                      `;
+                  }
                   
                   // Add confidence for emails if available
                   if (email.result.confidence !== undefined) {
