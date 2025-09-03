@@ -228,6 +228,92 @@
       }
 
       /* ==========================
+         CONFIDENCE LEVEL STYLES
+         ========================== */
+      .confidence-container {
+        margin: 20px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 216, 255, 0.2);
+        backdrop-filter: blur(10px);
+      }
+      
+      .confidence-bar {
+        width: 100%;
+        height: 24px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 10px 0;
+        position: relative;
+      }
+      
+      .confidence-fill {
+        height: 100%;
+        border-radius: 12px;
+        transition: width 0.8s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 13px;
+        font-weight: bold;
+        position: relative;
+        background: linear-gradient(135deg, #00d8ff 0%, #3a5fff 100%);
+      }
+      
+      .confidence-fill.high { 
+        background: linear-gradient(135deg, #00d8ff 0%, #00b8d4 100%);
+      }
+      .confidence-fill.medium { 
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+        color: #000; 
+      }
+      .confidence-fill.low { 
+        background: linear-gradient(135deg, #ff2d95 0%, #e91e63 100%);
+      }
+      
+      .confidence-text {
+        font-size: 15px;
+        margin: 8px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #eaeaea;
+      }
+      
+      .confidence-percentage {
+        font-weight: bold;
+        font-size: 16px;
+        color: #00d8ff;
+      }
+      
+      .confidence-label {
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 15px;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .label-high { background: linear-gradient(135deg, #00d8ff 0%, #00b8d4 100%); }
+      .label-medium { background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%); color: #000; }
+      .label-low { background: linear-gradient(135deg, #ff2d95 0%, #e91e63 100%); }
+
+      .probability-section {
+        margin-top: 15px;
+      }
+
+      .probability-section h4 {
+        color: #00d8ff;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+
+      /* ==========================
          EMAIL SCAN RESULTS - UPDATED CARD STYLE
          ========================== */
       .email-cards-container {
@@ -381,6 +467,49 @@
         margin: 0.75rem 0;
       }
 
+      /* Email confidence styles - darker theme for email cards */
+      .email-confidence-container {
+        margin: 15px 0;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .email-confidence-bar {
+        width: 100%;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 8px 0;
+      }
+
+      .email-confidence-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.6s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .email-confidence-fill.high { background-color: #27ae60; }
+      .email-confidence-fill.medium { background-color: #f39c12; }
+      .email-confidence-fill.low { background-color: #e74c3c; }
+
+      .email-confidence-text {
+        font-size: 13px;
+        margin: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #333;
+      }
+
       /* Optional staggered animation for multiple cards */
       .email-result-card:nth-child(1) {
         animation-delay: 0.1s;
@@ -521,21 +650,7 @@
         </form>
 
         {% if result and not scanned_emails %}
-        <div class="result-box" id="result-box">
-          <h3 class="text-center">Prediction Result</h3>
-          <p
-            class="{{ 'error-text' if result.is_phishing else 'success-text' }}"
-          >
-            {{ '🚨 PHISHING DETECTED!' if result.is_phishing else '✅ SAFE (Not
-            Phishing)' }}
-          </p>
-          <p class="text-center">
-            Classified as:
-            <strong
-              >{{ result.result_text or result.ml_label or 'Unknown' }}</strong
-            >
-          </p>
-        </div>
+        <div class="result-box" id="result-box"></div>
         {% endif %} {% if error %}
         <div class="error-message result-box">
           <p>{{ error }}</p>
@@ -573,44 +688,7 @@
         {% if scanned_emails %}
         <div class="result-box">
           <h3>Inbox Scan Results ({{ scanned_emails|length }} emails)</h3>
-          <div class="email-cards-container">
-            {% for email in scanned_emails[:3] %}
-            <div
-              class="email-result-card {{ 'phishing' if email.result.is_phishing else 'safe' }}"
-            >
-              <div class="email-header">
-                <p>
-                  <strong>From:</strong> {{ email.sender or "Unknown Sender" }}
-                </p>
-                <p>
-                  <strong>Subject:</strong> {{ email.subject or "No Subject" }}
-                </p>
-                <p><strong>Date:</strong> {{ email.date or "Unknown Date" }}</p>
-              </div>
-              <div class="email-snippet">
-                <p>{{ email.snippet|safe }}</p>
-              </div>
-              <div class="email-status">
-                {% if email.result.is_phishing %}
-                <span class="status-badge phishing-badge"
-                  >PHISHING DETECTED!</span
-                >
-                {% else %}
-                <span class="status-badge safe-badge">SAFE</span>
-                {% endif %}
-              </div>
-              {% if email.full_content %}
-              <div class="email-full-content" style="display: none">
-                <hr class="divider" />
-                <pre>{{ email.full_content|safe }}</pre>
-              </div>
-              <button class="expand-btn" onclick="toggleContent(this)">
-                Show Full Email
-              </button>
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
+          <div class="email-cards-container" id="email-cards-container"></div>
         </div>
         {% endif %}
       </div>
@@ -625,6 +703,184 @@
     </div>
 
     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          // Handle single URL/Email result
+          const result = {{ result | tojson | safe }};
+          const resultBox = document.getElementById('result-box');
+          
+          if (result && resultBox) {
+              let html = `<h3>Prediction Result</h3>`;
+              
+              // Main prediction result
+              if (result.is_phishing) {
+                  html += `<p class="error-text">🚨 <strong>PHISHING DETECTED!</strong></p>`;
+              } else {
+                  html += `<p class="success-text">✅ <strong>SAFE (Not Phishing)</strong></p>`;
+              }
+              
+              // Classification text
+              const classification = result.result_text || result.ml_label || 'Unknown';
+              html += `<p class="text-center">Classified as: <strong>${classification}</strong></p>`;
+              
+              // Add confidence level display
+              if (result.confidence !== undefined) {
+                  const confidence = parseFloat(result.confidence);
+                  const confidencePercentage = (confidence * 100).toFixed(1);
+                  
+                  let confidenceLevel, confidenceClass, labelClass;
+                  if (confidence >= 0.8) {
+                      confidenceLevel = "High";
+                      confidenceClass = "high";
+                      labelClass = "label-high";
+                  } else if (confidence >= 0.6) {
+                      confidenceLevel = "Medium";
+                      confidenceClass = "medium";
+                      labelClass = "label-medium";
+                  } else {
+                      confidenceLevel = "Low";
+                      confidenceClass = "low";
+                      labelClass = "label-low";
+                  }
+                  
+                  html += `
+                      <div class="confidence-container">
+                          <div class="confidence-text">
+                              <span>Confidence Level:</span>
+                              <span class="confidence-label ${labelClass}">${confidenceLevel}</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill ${confidenceClass}" style="width: ${confidencePercentage}%">
+                                  <span class="confidence-percentage">${confidencePercentage}%</span>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+              }
+              
+              // Detailed probabilities
+              if (result.phishing_probability !== undefined || result.safe_probability !== undefined) {
+                  html += `<div class="confidence-container"><div class="probability-section">`;
+                  html += `<h4>Detailed Probabilities:</h4>`;
+                  
+                  if (result.phishing_probability !== undefined) {
+                      const phishingProb = (parseFloat(result.phishing_probability) * 100).toFixed(1);
+                      html += `
+                          <div class="confidence-text">
+                              <span>🎣 Phishing Probability:</span>
+                              <span class="confidence-percentage">${phishingProb}%</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill low" style="width: ${phishingProb}%"></div>
+                          </div>
+                      `;
+                  }
+                  
+                  if (result.safe_probability !== undefined) {
+                      const safeProb = (parseFloat(result.safe_probability) * 100).toFixed(1);
+                      html += `
+                          <div class="confidence-text">
+                              <span>✅ Safe Probability:</span>
+                              <span class="confidence-percentage">${safeProb}%</span>
+                          </div>
+                          <div class="confidence-bar">
+                              <div class="confidence-fill high" style="width: ${safeProb}%"></div>
+                          </div>
+                      `;
+                  }
+                  
+                  html += `</div></div>`;
+              }
+              
+              // Additional info
+              if (result.model_name) {
+                  html += `<p><small>Model: ${result.model_name}</small></p>`;
+              }
+              
+              if (result.processing_time) {
+                  html += `<p><small>Processing Time: ${result.processing_time}ms</small></p>`;
+              }
+              
+              resultBox.innerHTML = html;
+          }
+
+          // Handle email scan results with confidence
+          const scannedEmails = {{ scanned_emails | tojson | safe }};
+          const emailContainer = document.getElementById('email-cards-container');
+          
+          if (scannedEmails && emailContainer) {
+              let emailsHtml = '';
+              
+              scannedEmails.slice(0, 3).forEach((email, index) => {
+                  const cardClass = email.result.is_phishing ? 'phishing' : 'safe';
+                  const statusBadge = email.result.is_phishing ? 
+                      '<span class="status-badge phishing-badge">PHISHING DETECTED!</span>' :
+                      '<span class="status-badge safe-badge">SAFE</span>';
+                  
+                  emailsHtml += `
+                      <div class="email-result-card ${cardClass}" style="animation-delay: ${(index + 1) * 0.1}s">
+                          <div class="email-header">
+                              <p><strong>From:</strong> ${email.sender || "Unknown Sender"}</p>
+                              <p><strong>Subject:</strong> ${email.subject || "No Subject"}</p>
+                              <p><strong>Date:</strong> ${email.date || "Unknown Date"}</p>
+                          </div>
+                          <div class="email-snippet">
+                              <p>${email.snippet || ''}</p>
+                          </div>
+                          <div class="email-status">
+                              ${statusBadge}
+                          </div>
+                  `;
+                  
+                  // Add confidence for emails if available
+                  if (email.result.confidence !== undefined) {
+                      const confidence = parseFloat(email.result.confidence);
+                      const confidencePercentage = (confidence * 100).toFixed(1);
+                      
+                      let confidenceLevel, confidenceClass;
+                      if (confidence >= 0.8) {
+                          confidenceLevel = "High";
+                          confidenceClass = "high";
+                      } else if (confidence >= 0.6) {
+                          confidenceLevel = "Medium";
+                          confidenceClass = "medium";
+                      } else {
+                          confidenceLevel = "Low";
+                          confidenceClass = "low";
+                      }
+                      
+                      emailsHtml += `
+                          <div class="email-confidence-container">
+                              <div class="email-confidence-text">
+                                  <span>Confidence: ${confidenceLevel}</span>
+                                  <span style="font-weight: bold;">${confidencePercentage}%</span>
+                              </div>
+                              <div class="email-confidence-bar">
+                                  <div class="email-confidence-fill ${confidenceClass}" style="width: ${confidencePercentage}%"></div>
+                              </div>
+                          </div>
+                      `;
+                  }
+                  
+                  // Full content section
+                  if (email.full_content) {
+                      emailsHtml += `
+                          <div class="email-full-content" style="display: none">
+                              <hr class="divider" />
+                              <pre>${email.full_content}</pre>
+                          </div>
+                          <button class="expand-btn" onclick="toggleContent(this)">
+                              Show Full Email
+                          </button>
+                      `;
+                  }
+                  
+                  emailsHtml += '</div>';
+              });
+              
+              emailContainer.innerHTML = emailsHtml;
+          }
+      });
+
       function showLoading() {
         document.getElementById("loadingOverlay").style.display = "flex";
       }

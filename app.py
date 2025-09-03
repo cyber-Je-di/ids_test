@@ -340,7 +340,6 @@ def get_phishing_prediction(input_data):
         return None, f"Error during prediction: {e}"
 
 #-----------------------------
-#imap integration    
 import imaplib
 import email
 from email.header import decode_header
@@ -355,16 +354,21 @@ def fetch_gmail_emails(user_email, app_password, max_emails=10):
         mail.login(user_email, app_password)
         mail.select("inbox")
 
-        status, messages = mail.search(None, "ALL")
+        # Get the total number of messages in the inbox
+        status, message_count_data = mail.status("inbox", "(MESSAGES)")
         if status != "OK":
-            return [], "Failed to fetch emails"
+            return [], "Failed to get message count"
+        
+        message_count = int(message_count_data[0].decode().split()[2].strip(")"))
 
-        mail_ids = messages[0].split()
-        latest_ids = mail_ids[-max_emails:]
+        # Calculate the range for the latest emails
+        start_id = max(1, message_count - max_emails + 1)
+        end_id = message_count
+
         emails_data = []
 
-        for mail_id in reversed(latest_ids):
-            status, msg_data = mail.fetch(mail_id, "(RFC822)")
+        for mail_id in reversed(range(start_id, end_id + 1)):
+            status, msg_data = mail.fetch(str(mail_id), "(RFC822)")
             if status != "OK":
                 continue
 
@@ -704,6 +708,47 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+
+
+# --- Chat API Endpoint for Dashboard Chat Modal ---
+from dotenv import load_dotenv
+load_dotenv()
+import openai
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    data = request.get_json()
+    user_message = data.get('message', '')
+    # System prompt for cybersecurity context
+    system_prompt = (
+        "You are a cybersecurity assistant for a security dashboard. "
+        "Give users practical tips on security, social engineering, and protection. "
+        "Always provide actionable advice and explain why each tip matters. "
+        "If asked about the system, mention it monitors threats, phishing, and scams."
+    )
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_message}
+    ]
+    # Read token and endpoint from .env
+    token = os.getenv("GITHUB_TOKEN")
+    endpoint = "https://models.github.ai/inference"
+    model = "openai/gpt-4.1"
+    try:
+        client = openai.OpenAI(base_url=endpoint, api_key=token)
+        response = client.chat.completions.create(
+            messages=messages,
+            temperature=0.7,
+            top_p=1.0,
+            model=model
+        )
+        reply = response.choices[0].message.content
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"[OpenAI API Error] {e}\n{error_details}")
+        reply = f"Sorry, there was an error connecting to the assistant. Details: {str(e)}"
+    return jsonify({"reply": reply})
 
 if __name__ == "__main__":
     print("🚀 Starting Enhanced Scam Detection System")
