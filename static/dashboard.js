@@ -27,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('emailsScanned').textContent = data.email.total;
                 document.getElementById('spamBlocked').textContent = data.email.phishing;
 
-                // ✅ Update "Last Update" timestamp
-                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
-
                 // ✅ Update Threat Preview Chart
                 const ctx = document.getElementById('miniThreatChart').getContext('2d');
                 if (window.threatChart) {

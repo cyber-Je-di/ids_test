@@ -194,11 +194,13 @@ def detect_bemba_scam_patterns(message):
     
     # Check all Bemba scam patterns
     for pattern, score, reason in BEMBA_SCAM_PATTERNS:
-        if re.search(pattern, text, re.IGNORECASE):
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
             scam_score += score
             if reason not in reasons:
                 reasons.append(reason)
-            detected_patterns.append(pattern)
+            # Use match.group(0) to get the actual matched string and add it
+            detected_patterns.append(match.group(0))
     
     # Additional scoring for multiple patterns
     pattern_count = len(detected_patterns)
@@ -228,13 +230,15 @@ def detect_bemba_scam_patterns(message):
     if is_bemba:
         explanation += " | Language: Bemba"
     
+    # Return unique matches
     return {
         "risk_level": risk_level,
         "confidence": round(confidence, 2),
         "explanation": explanation,
         "language": Language.BEMBA.value if is_bemba else Language.UNKNOWN.value,
         "is_bemba": is_bemba,
-        "pattern_count": pattern_count
+        "pattern_count": pattern_count,
+        "detected_patterns": list(set(detected_patterns))
     }
 
 # Load models at startup

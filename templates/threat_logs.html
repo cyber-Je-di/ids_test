@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Threat Logs - CyberGuard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='threatcss.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='analyticscss.css') }}">
 </head>
 <body>
   <nav class="navbar glass-effect flex justify-between items-center">
@@ -13,16 +13,12 @@
   </nav>
 
   <div class="max-w-7xl mx-auto px-6 py-6">
-    <div class="filter-tabs bg-gray-100 p-2 rounded-xl">
-      <div class="filter-tab active" onclick="filterLogs('all')">All</div>
-      <div class="filter-tab" onclick="filterLogs('critical')">Critical</div>
-      <div class="filter-tab" onclick="filterLogs('high')">High</div>
-      <div class="filter-tab" onclick="filterLogs('medium')">Medium</div>
-      <div class="filter-tab" onclick="filterLogs('low')">Low</div>
-    </div>
-
-    <div id="threat-log" class="max-h-[75vh] overflow-y-auto bg-gray-900 rounded-xl p-4 text-white mt-4">
-      <!-- Logs populated dynamically -->
+    <div class="card">
+        <h3 class="font-semibold mb-3">All Detected Events</h3>
+        <div id="threat-log" class="overflow-x-auto">
+            <!-- Logs populated dynamically by threat_dashboard.js -->
+            <p class="text-center text-gray-400 p-4">Loading logs...</p>
+        </div>
     </div>
   </div>
 
