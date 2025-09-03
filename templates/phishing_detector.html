@@ -685,7 +685,7 @@
         </p>
 
         <!-- Manual URL/Email Analysis -->
-        <form method="POST" class="form-container">
+        <form method="POST" id="manual-scan-form" class="form-container">
           <label for="input_data">Enter URL or Email Content:</label>
           <textarea
             name="input_data"
@@ -708,10 +708,7 @@
         {% endif %}
 
         <!-- Gmail Inbox Scan -->
-        <h2 class="text-center" style="margin-top: 40px">
-          Scan Your Gmail Inbox
-        </h2>
-        <form method="POST" class="form-container">
+        <form method="POST" id="inbox-scan-form" class="form-container" style="margin-top: 40px">
           <label for="email">Gmail Address:</label>
           <input
             type="email"
@@ -752,14 +749,23 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-          const forms = document.querySelectorAll('.form-container');
+          const manualForm = document.getElementById('manual-scan-form');
+          const inboxForm = document.getElementById('inbox-scan-form');
           const overlay = document.getElementById('loading-overlay');
-          if(forms.length && overlay) {
-            forms.forEach(form => {
-                form.addEventListener('submit', () => {
-                    overlay.style.display = 'flex';
-                });
-            });
+          const overlayText = overlay ? overlay.querySelector('p') : null;
+
+          if (manualForm && overlay) {
+              manualForm.addEventListener('submit', () => {
+                  if(overlayText) overlayText.textContent = 'Analyzing...';
+                  overlay.style.display = 'flex';
+              });
+          }
+
+          if (inboxForm && overlay) {
+              inboxForm.addEventListener('submit', () => {
+                  if(overlayText) overlayText.textContent = 'Scanning Inbox... This may take a moment.';
+                  overlay.style.display = 'flex';
+              });
           }
 
           // Handle single URL/Email result

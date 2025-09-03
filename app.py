@@ -454,13 +454,11 @@ def ids_dashboard():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    print("[DEBUG] /predict endpoint hit")
     global alert_id_counter
     if not model or not scaler:
         return jsonify({"error": "Model not loaded"}), 500
 
     data = request.get_json()
-    print(f"[DEBUG] Received data in /predict: {data}")
     if not data or "features" not in data:
         return jsonify({"error": "Invalid input data"}), 400
 
@@ -482,7 +480,6 @@ def predict():
                 "attack_type": data.get("snort_alert_description", "Unknown Event"),
                 "ml_prediction": ml_prediction_text,
             }
-            print(f"[DEBUG] Adding to confirmed_attacks: {alert_info}")
             confirmed_attacks.insert(0, alert_info)
             if len(confirmed_attacks) > 100:
                 confirmed_attacks.pop()
@@ -495,7 +492,6 @@ def predict():
 
 @app.route("/get_alerts", methods=["GET"])
 def get_alerts():
-    print(f"[DEBUG] /get_alerts endpoint hit. Returning {len(confirmed_attacks)} alerts.")
     with lock:
         return jsonify(confirmed_attacks)
 
