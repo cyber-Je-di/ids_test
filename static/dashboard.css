@@ -637,21 +637,37 @@ body {
 .chat-modal-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding: 1rem;
     color: #EAEAEA;
     text-align: center;
+    
+    /* MODIFICATION: Let this flex item grow to fill the modal */
+    flex: 1; 
+    /* MODIFICATION: Crucial fix to prevent overflow issues in flex children */
+    min-height: 0; 
 }
 
+/* The scrollable message area */
 .chat-messages {
-    flex: 1;               /* take remaining space */
-    overflow-y: auto;      /* enable vertical scroll */
+    flex: 1;               /* This makes it take all available vertical space */
+    overflow-y: auto;      /* This adds the scrollbar ONLY when needed */
     background: rgba(255,255,255,0.05);
     border-radius: 8px;
     padding: 10px;
     margin: 10px 0;
+    text-align: left;
 }
 
+/* Custom scrollbar for a better look */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 216, 255, 0.5);
+    border-radius: 3px;
+}
 
 .chat-modal-content img.mascot {
     width: 120px;
@@ -660,19 +676,10 @@ body {
     filter: drop-shadow(0 0 8px rgba(0,216,255,0.5));
 }
 
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-    padding: 10px;
-    margin: 10px 0;
-    text-align: left;
-}
-
 #chatForm {
     display: flex;
     gap: 0.5rem;
+    padding: 10px;
 }
 
 #chatInput {
