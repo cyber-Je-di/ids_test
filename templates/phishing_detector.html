@@ -657,22 +657,23 @@
       </div>
       <div class="nav-links">
         {% set role = session.get('user_role') %}
-        <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
 
         {% if role in ['admin', 'analyst'] %}
         <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-        {% endif %}
+        <a href="{{ url_for('ids_dashboard') }}" class="nav-link">IDS</a>
+        {% endif %} 
 
-        <a href="{{ url_for('sms_detector') }}" class="nav-link"
-          >SMS Detector</a
-        >
-        <a href="{{ url_for('phishing_detector') }}" class="nav-link active"
-          >Phishing Detector</a
-        >
+        <a href="{{ url_for('sms_detector') }}" class="nav-link">SMS Detector</a>
+        <a href="{{ url_for('phishing_detector') }}" class="nav-link">Phishing Detector</a>
+        <a href="{{ url_for('awareness_page') }}" class="nav-link">Cybersecurity Awareness</a>
+
         {% if session.get('user_email') %}
         <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
         <a href="{{ url_for('login') }}">Login</a>
+        {% endif %} {% if role %}
+        <span class="user-info">👤 {{ role.capitalize() }}</span>
         {% endif %}
       </div>
     </nav>

@@ -1,27 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Threat Logs - CyberGuard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='analyticscss.css') }}">
-</head>
-<body>
-  <nav class="navbar glass-effect flex justify-between items-center">
-    <h2 class="text-xl font-bold">📊 Threat Logs</h2>
-    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
-  </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Threat Logs - CyberGuard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='threat_logic.css') }}" />
+    
+  </head>
+  <body class="bg-gray-900 text-white">
+    <nav class="glass-effect flex justify-between items-center p-4">
+      <h2 class="text-2xl font-bold">📊 Threat Logs</h2>
+      <a
+        href="#"
+        class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+        >⬅ Back to Dashboard</a
+      >
+    </nav>
 
-  <div class="max-w-7xl mx-auto px-6 py-6">
-    <div class="card">
-        <h3 class="font-semibold mb-3">All Detected Events</h3>
-        <div id="threat-log" class="overflow-x-auto">
-            <!-- Logs populated dynamically by threat_dashboard.js -->
-            <p class="text-center text-gray-400 p-4">Loading logs...</p>
+    <main class="max-w-7xl mx-auto p-6">
+      <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-semibold">All Detected Events</h3>
+          <div class="relative">
+            <input
+              type="text"
+              id="searchInput"
+              class="bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search logs..."
+            />
+          </div>
         </div>
-    </div>
-  </div>
+        <div id="threat-log-container" class="overflow-x-auto">
+          <table
+            id="threat-log-table"
+            class="min-w-full divide-y divide-gray-700"
+          >
+            <thead class="bg-gray-700">
+              <tr>
+                <th
+                  scope="col"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                >
+                  Timestamp
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                >
+                  Source IP
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                >
+                  Severity
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                >
+                  Action Taken
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-800 divide-y divide-gray-700">
+              <!-- Dynamic content will be injected here -->
+            </tbody>
+          </table>
+          <p id="loading-message" class="text-center text-gray-400 p-4">
+            Loading logs...
+          </p>
+        </div>
+      </div>
+    </main>
 
-  <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+  </body>
 </html>

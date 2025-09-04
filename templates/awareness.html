@@ -532,12 +532,11 @@
           >Home</a
         >
 
+        
+        
         {% if role in ['admin', 'analyst'] %}
-        <a
-          href="/dashboard"
-          class="nav-link hover:text-blue-300 transition-colors duration-200"
-          >Dashboard</a
-        >
+        <a href="/dashboard" class="nav-link hover:text-blue-300 transition-colors duration-200">Dashboard</a>
+        <a href="{{ url_for('ids_dashboard') }}" class="nav-link">IDS</a>
         {% endif %}
 
         <a

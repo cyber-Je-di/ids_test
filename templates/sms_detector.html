@@ -14,7 +14,7 @@
         border-radius: 8px;
         border-left: 4px solid #007bff;
       }
-      
+
       .confidence-bar {
         width: 100%;
         height: 20px;
@@ -23,7 +23,7 @@
         overflow: hidden;
         margin: 8px 0;
       }
-      
+
       .confidence-fill {
         height: 100%;
         border-radius: 10px;
@@ -35,11 +35,18 @@
         font-size: 12px;
         font-weight: bold;
       }
-      
-      .confidence-high { background-color: #28a745; }
-      .confidence-medium { background-color: #ffc107; color: #000; }
-      .confidence-low { background-color: #dc3545; }
-      
+
+      .confidence-high {
+        background-color: #28a745;
+      }
+      .confidence-medium {
+        background-color: #ffc107;
+        color: #000;
+      }
+      .confidence-low {
+        background-color: #dc3545;
+      }
+
       .confidence-text {
         font-size: 14px;
         margin: 5px 0;
@@ -47,22 +54,29 @@
         justify-content: space-between;
         align-items: center;
       }
-      
+
       .confidence-percentage {
         font-weight: bold;
         font-size: 16px;
       }
-      
+
       .confidence-label {
         font-size: 12px;
         padding: 2px 8px;
         border-radius: 12px;
         color: white;
       }
-      
-      .label-high { background-color: #28a745; }
-      .label-medium { background-color: #ffc107; color: #000; }
-      .label-low { background-color: #dc3545; }
+
+      .label-high {
+        background-color: #28a745;
+      }
+      .label-medium {
+        background-color: #ffc107;
+        color: #000;
+      }
+      .label-low {
+        background-color: #dc3545;
+      }
 
       /* Styles for Explanation Box */
       .explanation-box {
@@ -87,7 +101,7 @@
       .patterns-container {
         margin-top: 15px;
         padding-top: 15px;
-        border-top: 1px solid rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
       .patterns-tags {
         display: flex;
@@ -131,15 +145,19 @@
         margin-bottom: 15px;
       }
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
   <body>
     <div id="loading-overlay" class="loading-overlay">
-        <div class="spinner"></div>
-        <p>Analyzing Message...</p>
+      <div class="spinner"></div>
+      <p>Analyzing Message...</p>
     </div>
     <nav class="navbar dashboard-nav">
       <div class="nav-brand">
@@ -147,21 +165,23 @@
       </div>
       <div class="nav-links">
         {% set role = session.get('user_role') %}
-        <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
+
         {% if role in ['admin', 'analyst'] %}
         <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-        {% endif %}
-        
-        <a href="{{ url_for('sms_detector') }}" class="nav-link active"
-          >SMS Detector</a
-        >
-        <a href="{{ url_for('phishing_detector') }}" class="nav-link"
-          >Phishing Detector</a
-        >
+        <a href="{{ url_for('ids_dashboard') }}" class="nav-link">IDS</a>
+        {% endif %} 
+
+        <a href="{{ url_for('sms_detector') }}" class="nav-link">SMS Detector</a>
+        <a href="{{ url_for('phishing_detector') }}" class="nav-link">Phishing Detector</a>
+        <a href="{{ url_for('awareness_page') }}" class="nav-link">Cybersecurity Awareness</a>
+
         {% if session.get('user_email') %}
         <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
         <a href="{{ url_for('login') }}">Login</a>
+        {% endif %} {% if role %}
+        <span class="user-info">👤 {{ role.capitalize() }}</span>
         {% endif %}
       </div>
     </nav>
@@ -203,10 +223,10 @@
 
           const result = {{ result | tojson | safe }};
           const resultBox = document.getElementById('result-box');
-          
+
           if (result) {
               let html = `<h3>Prediction Result:</h3>`;
-              
+
               // Main prediction result
               if (result.is_spam) {
                   html += `<p class="error-text">🚨 <strong>SCAM DETECTED!</strong></p>`;
@@ -223,17 +243,17 @@
                       </div>
                   `;
               }
-              
+
               // Classification text
               if (result.result_text) {
                   html += `<p>Classification: <strong>${result.result_text}</strong></p>`;
               }
-              
+
               // Confidence Level Display
               if (result.confidence !== undefined) {
                   const confidence = parseFloat(result.confidence);
                   const confidencePercentage = (confidence * 100).toFixed(1);
-                  
+
                   // Determine confidence level and styling
                   let confidenceLevel, confidenceClass, labelClass;
                   if (confidence >= 0.8) {
@@ -249,7 +269,7 @@
                       confidenceClass = "confidence-low";
                       labelClass = "label-low";
                   }
-                  
+
                   html += `
                       <div class="confidence-container">
                           <div class="confidence-text">
@@ -264,12 +284,12 @@
                       </div>
                   `;
               }
-              
+
               // Probability scores (if available)
               if (result.spam_probability !== undefined || result.ham_probability !== undefined) {
                   html += `<div class="confidence-container">`;
                   html += `<h4>Detailed Probabilities:</h4>`;
-                  
+
                   if (result.spam_probability !== undefined) {
                       const spamProb = (parseFloat(result.spam_probability) * 100).toFixed(1);
                       html += `
@@ -282,7 +302,7 @@
                           </div>
                       `;
                   }
-                  
+
                   if (result.ham_probability !== undefined) {
                       const hamProb = (parseFloat(result.ham_probability) * 100).toFixed(1);
                       html += `
@@ -295,15 +315,15 @@
                           </div>
                       `;
                   }
-                  
+
                   html += `</div>`;
               }
-              
+
               // Additional model information (if available)
               if (result.model_name) {
                   html += `<p><small>Model: ${result.model_name}</small></p>`;
               }
-              
+
               if (result.processing_time) {
                   html += `<p><small>Processing Time: ${result.processing_time}ms</small></p>`;
               }
@@ -320,7 +340,7 @@
                   });
                   html += `</div></div>`;
               }
-              
+
               resultBox.innerHTML = html;
           }
       });

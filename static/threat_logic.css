@@ -1,0 +1,103 @@
+/* General Body Styles */
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Glass Effect Navbar */
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Card Styles */
+      .card {
+        background-color: #1f2937; /* bg-gray-800 */
+        border-radius: 0.75rem; /* rounded-xl */
+        padding: 1.5rem; /* p-6 */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Table Specific Styles */
+      #threat-log-table {
+        border-collapse: separate;
+        border-spacing: 0 0.5rem; /* Add space between rows */
+      }
+
+      #threat-log-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      #threat-log-table tbody tr {
+        transition: background-color 0.2s ease-in-out,
+          transform 0.2s ease-in-out;
+      }
+
+      #threat-log-table tbody tr:hover {
+        background-color: #374151; /* bg-gray-700 */
+        transform: translateY(-2px);
+      }
+
+      #threat-log-table tbody td {
+        padding: 1rem 1rem;
+        vertical-align: middle;
+      }
+
+      /* Severity Level Indicators */
+      .severity-low {
+        background-color: rgba(
+          16,
+          185,
+          129,
+          0.2
+        ); /* Emerald-500 with opacity */
+        color: #10b981;
+      }
+
+      .severity-medium {
+        background-color: rgba(245, 158, 11, 0.2); /* Amber-500 with opacity */
+        color: #f59e0b;
+      }
+
+      .severity-high {
+        background-color: rgba(239, 68, 68, 0.2); /* Red-500 with opacity */
+        color: #ef4444;
+      }
+
+      .severity-critical {
+        background-color: rgba(168, 85, 247, 0.2); /* Purple-500 with opacity */
+        color: #a855f7;
+      }
+
+      .severity-indicator {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px; /* rounded-full */
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 600; /* font-semibold */
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #1f2937; /* bg-gray-800 */
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #4b5563; /* bg-gray-600 */
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #6b7280; /* bg-gray-500 */
+      }

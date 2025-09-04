@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Attack Analytics - CyberGuard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='analyticscss.css') }}">
-</head>
-<body>
-  <nav class="navbar glass-effect flex justify-between items-center">
-    <h2 class="text-xl font-bold">📈 Attack Analytics</h2>
-    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
-  </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attack Analytics - CyberGuard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='threat_logic.css') }}" />
+  </head>
+  <body class="bg-gray-900 text-white">
+    <nav class="glass-effect flex justify-between items-center p-4">
+      <h2 class="text-2xl font-bold">📈 Attack Analytics</h2>
+      <a
+        href="index.html"
+        class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+        >⬅ Back to Logs</a
+      >
+    </nav>
 
-  <div class="max-w-7xl mx-auto px-6 py-6 grid lg:grid-cols-2 gap-6">
-    <!-- Threat Types -->
-    <div class="card">
-      <h3 class="font-semibold mb-3">Top Threat Types</h3>
-      <canvas id="threatTypeChart"></canvas>
+    <div class="max-w-7xl mx-auto p-6 grid lg:grid-cols-2 gap-6">
+      <!-- Threat Types -->
+      <div class="card">
+        <h3 class="font-semibold text-xl mb-4">Top Threat Types</h3>
+        <div class="h-64 flex justify-center items-center">
+          <canvas id="threatTypeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="card">
+        <h3 class="font-semibold text-xl mb-4">24-Hour Threat Timeline</h3>
+        <div class="h-64 flex justify-center items-center">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Attack Sources -->
+      <div class="card lg:col-span-2">
+        <h3 class="font-semibold text-xl mb-4">Top Attack Sources</h3>
+        <div id="attack-sources" class="space-y-3 max-h-80 overflow-y-auto">
+          <!-- Attack sources will be populated here -->
+        </div>
+      </div>
     </div>
 
-    <!-- Timeline -->
-    <div class="card">
-      <h3 class="font-semibold mb-3">24-Hour Threat Timeline</h3>
-      <canvas id="timelineChart"></canvas>
-    </div>
-
-    <!-- Attack Sources -->
-    <div class="card lg:col-span-2">
-      <h3 class="font-semibold mb-3">Attack Sources</h3>
-      <div id="attack-sources" class="space-y-2"></div>
-    </div>
-  </div>
-
-  <script src="{{ url_for('static', filename='analyticjs.js') }}"></script>
-</body>
+    <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+  </body>
 </html>

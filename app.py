@@ -683,7 +683,7 @@ def get_bemba_samples():
             "Mwabuka shani! Naifwa na banki yobe. Nomba ulandile prize ya K10,000. Tumako imali ya K500 ku +260955123456 ukalande prize yobe.",
             "BWANGU BWANGU! Umwana obe alibeleka mu chipatala. Tumako imali ya K2,000 ku +260966789012 ukamusunge. Naleta ifyo ukwete nomba.",
             "Congratulations! Uliwina umupati wa MTN. Landa free airtime ya K500. Tumako imali ya K100 ku +260977345678 ukalande.",
-            "ninebo doctor maomba nimbwela  kusumbawanga naliisa muzambia ndepanga k550,000 pali 1:30hrs, naamangaya business ndapela, pamo najigi ring, navimbi tuma 4n."
+            "ninebo doctor maomba nimbwela  kusumbawanga naliisa muzambia ndepanga k550,000 pali 1:30hrs, naamangaya business ndapela, pamo najigi ring, navimbi tuma 4n.",
         ],
         "safe_messages": [
             "Mwaisa shani? Tulelanda ukucila ifyakucita pa weekend? Naleta ifyo wishiba na ifyo ufwaya ukucita.",

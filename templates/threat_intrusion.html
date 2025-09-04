@@ -1,39 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Intrusion Detection - CyberGuard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='analyticscss.css') }}">
-</head>
-<body>
-  <nav class="navbar glass-effect flex justify-between items-center">
-    <h2 class="text-xl font-bold">🔍 Intrusion Detection Overview</h2>
-    <a href="/threat_dashboard" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">⬅ Back</a>
-  </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intrusion Detection - CyberGuard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='threat_logic.css') }}" />
+  </head>
+  <body class="bg-gray-900 text-white">
+    <nav class="glass-effect flex justify-between items-center p-4">
+      <h2 class="text-2xl font-bold">🔍 Intrusion Detection Overview</h2>
+      <a
+        href="index.html"
+        class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+        >⬅ Back to Logs</a
+      >
+    </nav>
 
-  <div class="max-w-7xl mx-auto px-6 py-6">
-    <div class="card">
-        <h3 class="font-semibold mb-3">Live Intrusion Statistics</h3>
+    <main class="max-w-7xl mx-auto p-6">
+      <div class="card">
+        <h3 class="font-semibold text-xl mb-6">Live Intrusion Statistics</h3>
         <div class="grid md:grid-cols-3 gap-6 text-center">
-            <div class="p-4 bg-gray-900 rounded-xl">
-                <h4 class="text-sm font-semibold text-cyan-400 mb-2">Total Events Logged</h4>
-                <div class="text-3xl font-bold" id="network-events">0</div>
-            </div>
-            <div class="p-4 bg-gray-900 rounded-xl">
-                <h4 class="text-sm font-semibold text-purple-400 mb-2">Anomalies Detected</h4>
-                <div class="text-3xl font-bold" id="anomalies">0</div>
-                <p class="text-xs text-gray-500">(Not Implemented)</p>
-            </div>
-            <div class="p-4 bg-gray-900 rounded-xl">
-                <h4 class="text-sm font-semibold text-teal-400 mb-2">Avg. Response Time</h4>
-                <div class="text-3xl font-bold" id="response-time">N/A</div>
-                <p class="text-xs text-gray-500">(Not Implemented)</p>
-            </div>
+          <div
+            class="p-6 bg-gray-800 rounded-xl transform hover:scale-105 transition-transform"
+          >
+            <h4
+              class="text-sm font-semibold text-cyan-400 mb-2 uppercase tracking-wider"
+            >
+              Total Events Logged
+            </h4>
+            <div class="text-5xl font-bold" id="network-events">0</div>
+          </div>
+          <div
+            class="p-6 bg-gray-800 rounded-xl transform hover:scale-105 transition-transform"
+          >
+            <h4
+              class="text-sm font-semibold text-purple-400 mb-2 uppercase tracking-wider"
+            >
+              Anomalies Detected
+            </h4>
+            <div class="text-5xl font-bold" id="anomalies">7</div>
+            <p class="text-xs text-gray-500 mt-2">(Based on mock data)</p>
+          </div>
+          <div
+            class="p-6 bg-gray-800 rounded-xl transform hover:scale-105 transition-transform"
+          >
+            <h4
+              class="text-sm font-semibold text-teal-400 mb-2 uppercase tracking-wider"
+            >
+              Avg. Response Time
+            </h4>
+            <div class="text-5xl font-bold" id="response-time">35ms</div>
+            <p class="text-xs text-gray-500 mt-2">(Simulated)</p>
+          </div>
         </div>
-    </div>
-  </div>
+      </div>
+    </main>
 
-  <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
-</body>
+    <script src="{{ url_for('static', filename='threat_dashboard.js') }}"></script>
+  </body>
 </html>
