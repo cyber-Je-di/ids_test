@@ -12,17 +12,12 @@
   <body class="bg-gray-900 text-white">
     <nav class="glass-effect flex justify-between items-center p-4">
       <h2 class="text-2xl font-bold">📈 Attack Analytics</h2>
-      <a
-        href="index.html"
-        class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-        >⬅ Back to Logs</a
-      >
+      <a href="{{ url_for('threat_dashboard') }}" class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">⬅ Back to Dashboard</a>
     </nav>
 
     <div class="max-w-7xl mx-auto p-6 grid lg:grid-cols-2 gap-6">
       <!-- Threat Types -->
-      <div class="card">
-        <h3 class="font-semibold text-xl mb-4">Top Threat Types</h3>
+      <div class="card" style="width: 400px; height: 400px;">
         <div class="h-64 flex justify-center items-center">
           <canvas id="threatTypeChart"></canvas>
         </div>
