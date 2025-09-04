@@ -32,20 +32,6 @@
     </nav>
 
     <div class="dashboard-container">
-    <!-- Chat Modal Trigger Button -->
-    <button id="openChatModal" class="chat-modal-btn"><i class="fa-solid fa-comments"></i> Cybersecurity Chat Assistant</button>
-    <div class="dashboard-header">
-            <h1>Security Operations Center</h1>
-            <div class="status-indicators">
-                <div class="status-item status-good">
-                    <span class="status-dot"></span>
-                    <span>System Status: Operational</span>
-                </div>
-                <!-- <div class="status-item">
-                    <span>Last Update: <span id="lastUpdate"></span></span>
-                </div> -->
-            </div>
-        </div>
 
         <div class="dashboard-grid">
             <div class="dashboard-card" onclick="window.location.href='{{ url_for('ids_dashboard') }}'">
@@ -234,75 +220,6 @@
         </div>
     </div>
 
-    <!-- FLOATING BUTTON TO OPEN CHAT -->
-    <button id="openChatBtn" class="chat-open-btn" aria-label="Open chat">
-        <i class="fa-solid fa-comment-dots fa-xl"></i>
-    </button>
 
-    <!-- SCRIPT -->
-    <script>
-        // Chat Modal Logic
-        const chatModal = document.getElementById('chatModal');
-        const openChatBtn = document.getElementById('openChatBtn');
-        const closeChatModal = document.getElementById('closeChatModal');
-        const chatForm = document.getElementById('chatForm');
-        const chatInput = document.getElementById('chatInput');
-        const chatMessages = document.getElementById('chatMessages');
-
-        openChatBtn.onclick = () => { chatModal.style.display = 'flex'; };
-        closeChatModal.onclick = () => { chatModal.style.display = 'none'; };
-        window.onclick = (event) => { if (event.target == chatModal) chatModal.style.display = 'none'; };
-
-        chatForm.onsubmit = async function(e) {
-            e.preventDefault();
-            const userMsg = chatInput.value.trim();
-            if (!userMsg) return;
-            appendMessage('user', userMsg);
-            chatInput.value = '';
-
-            try {
-                const res = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMsg })
-                });
-                const data = await res.json();
-                appendMessage('assistant', data.reply);
-            } catch (err) {
-                appendMessage('assistant', 'Sorry, there was an error connecting to the assistant.');
-            }
-        };
-
-        function appendMessage(role, text) {
-            const msgContainer = document.createElement('div');
-            msgContainer.className = role === 'user' ? 'chat-user' : 'chat-assistant';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'chat-bubble';
-            bubble.textContent = text;
-
-            if (role === 'assistant') {
-                const avatar = document.createElement('img');
-                // Note: The url_for needs to be handled carefully in JS.
-                // A better approach would be to pass this from the template to JS.
-                // For now, we hardcode the path as the script is inline.
-                avatar.src = "{{ url_for('static', filename='mascot.png') }}";
-                avatar.alt = "Mascot";
-                avatar.className = 'chat-avatar';
-                msgContainer.appendChild(avatar);
-            }
-
-            msgContainer.appendChild(bubble);
-
-            // Clear the initial welcome message if it exists
-            const initialWelcome = document.querySelector('#chatMessages .chat-assistant');
-            if (initialWelcome && chatMessages.children.length === 1) {
-                chatMessages.innerHTML = '';
-            }
-
-            chatMessages.appendChild(msgContainer);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-    </script>
-</body>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script></body>
 </html>

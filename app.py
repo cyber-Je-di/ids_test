@@ -654,8 +654,6 @@ def phishing_detector():
         error=error
     )
 
-
-    
 # Admin + analyst
 @app.route("/threat_dashboard")
 @login_required(role=["admin", "analyst"])
@@ -733,13 +731,10 @@ def login():
     return render_template('login.html')
 
 
-
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
-
-
 
 # --- Chat API Endpoint for Dashboard Chat Modal ---
 from dotenv import load_dotenv
