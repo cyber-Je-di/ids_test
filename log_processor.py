@@ -69,8 +69,8 @@ def load_rule_priorities(rule_file_path):
                 if match:
                     priorities[match.group(1)] = int(match.group(2))
     except FileNotFoundError:
-        print(f"ERROR: Rule file not found at {rule_file_path}.")
-        return None
+        print(f"WARNING: Rule file not found at {rule_file_path}. Continuing without rule-specific priorities.")
+        return {}
 
     print(f"Successfully loaded {len(priorities)} rule priorities.")
     return priorities
@@ -131,8 +131,6 @@ if __name__ == "__main__":
         rule_priorities_map = load_rule_priorities(
             config.get("Paths", "community_rules_file")
         )
-        if rule_priorities_map is None:
-            exit()
 
         print("\nStarting Snort Log Processor...")
         snort_log_file = config.get("Paths", "snort_log_file")

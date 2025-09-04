@@ -1,0 +1,4 @@
+# This is a placeholder for Snort community rules.
+# You can add your own rules here in the standard Snort format.
+# For example:
+# alert tcp any any -> any 80 (msg:"WEB-ATTACKS SQL injection attempt"; content:"' or 1=1"; priority:1; sid:1000001;)

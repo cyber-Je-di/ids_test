@@ -1,0 +1,6 @@
+# This is a placeholder for Snort alert logs in CSV format.
+# The log_processor.py script watches this file for new entries.
+#
+# Example format:
+# MM/DD-HH:MM:SS.ms,Alert Message,Protocol,SRC_IP,SRC_PORT,DST_IP,DST_PORT
+# 09/03-15:30:00.123,MALWARE Generic Trojan,TCP,203.0.113.5,5432,10.0.0.50,443
